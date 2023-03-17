@@ -56,11 +56,23 @@ public class SokobanDomainParser {
 
             // Niveau
             String[] lignes = this.testIn.split("\n");
+            int longestLength = 0;
+
+            for (String ligne : lignes) {
+                if (ligne.length() > longestLength) {
+                    longestLength = ligne.length();
+                }
+            }
+
             System.out.println(Arrays.toString(lignes));
             int nbRows = lignes.length;
-            int nbCols = lignes[0].length();
+            this.level = new char[nbRows][];
+
+            for (int i=0; i<lignes.length; i++) {
+                level[i] = new char[lignes[i].length()];
+            }
+
             
-            this.level = new char[nbRows][nbCols];
 
             // Objets
             String _positions = "";
@@ -76,6 +88,7 @@ public class SokobanDomainParser {
             ArrayList<String> toBindDest = new ArrayList<>(); // destinations à lier à une boite
 
             for (int i = 0; i < nbRows; i++) {
+                int nbCols = lignes[i].length();
                 for (int j = 0; j < nbCols; j++) {
                     this.level[i][j] = lignes[i].charAt(j);
 
