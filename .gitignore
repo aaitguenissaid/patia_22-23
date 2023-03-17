@@ -28,7 +28,7 @@ ProjetSokoban/SokobanPDDLParser/chemin.txt
 ProjetSokoban/SokobanPDDLParser/filtered_output.txt
 ProjetSokoban/SokobanPDDLParser/output.txt
 ProjetSokoban/SokobanPDDLParser/target/
-ProjetSokoban/SokobanPDDLParser/Scoria-Level*.pddl
+ProjetSokoban/SokobanPDDLParser/Scoria*-Level*.pddl
 
 #IDE
 ProjetSokoban/SokobanPDDLParser/.idea/
