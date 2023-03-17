@@ -34,13 +34,13 @@ public class SokobanResultInterpreter {
         int dy = y2 - y1;
 
         if (dx == 1) {
-            return "D";
-        } else if (dx == -1) {
-            return "U";
-        } else if (dy == 1) {
             return "R";
-        } else if (dy == -1) {
+        } else if (dx == -1) {
             return "L";
+        } else if (dy == 1) {
+            return "D";
+        } else if (dy == -1) {
+            return "U";
         }
 
         return null;
