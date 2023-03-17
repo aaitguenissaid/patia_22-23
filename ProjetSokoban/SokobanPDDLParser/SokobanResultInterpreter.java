@@ -58,41 +58,26 @@ public class SokobanResultInterpreter {
         for (String action : actions) {
             String[] parts = cleanInputString(action);
 	        //System.out.println(parts[2]);
-	
-            //si action move
-            if ( parts[1].replaceAll("[()\\s]", "").equals("move")) {
-                String fromPos = parts[3].replaceAll("[()\\s]", "");
-                String toPos = parts[4].replaceAll("[()\\s]", "");
-                String pas = getDirection(fromPos, toPos);
-                chemin.append(pas);
+
+            for(int i = 0;i < parts.length;i++){
+                
+                if(parts[i].replaceAll("[()\\s]", "").equals("move")){
+                    String fromPos = parts[i+2].replaceAll("[()\\s]", "");
+                    String toPos = parts[i+3].replaceAll("[()\\s]", "");
+                    String pas = getDirection(fromPos, toPos);
+                    chemin.append(pas);
+                    break;
+                }
+
+                if(parts[i].replaceAll("[()\\s]", "").equals("push")){
+                    String fromPos = parts[i+4].replaceAll("[()\\s]", "");
+                    String toPos = parts[i+5].replaceAll("[()\\s]", "");
+                    String pas = getDirection(fromPos, toPos);
+                    chemin.append(pas);
+                    break;
+                }
+
             }
-
-            //si action move
-            if ( parts[2].replaceAll("[()\\s]", "").equals("move")) {
-                String fromPos = parts[4].replaceAll("[()\\s]", "");
-                String toPos = parts[5].replaceAll("[()\\s]", "");
-                String pas = getDirection(fromPos, toPos);
-                chemin.append(pas);
-            }
-
-            //si action push
-            else if (parts[1].replaceAll("[()\\s]", "").equals("push")){
-                String fromPos = parts[5].replaceAll("[()\\s]", "");
-                String toPos = parts[6].replaceAll("[()\\s]", "");
-                String pas = getDirection(fromPos, toPos);
-                chemin.append(pas);
-            }
-
-            //si action push
-            else if ( parts[0].replaceAll("[()\\s]", "").equals("push")) {
-                String fromPos = parts[4].replaceAll("[()\\s]", "");
-                String toPos = parts[5].replaceAll("[()\\s]", "");
-                String pas = getDirection(fromPos, toPos);
-                chemin.append(pas);
-            }
-
-
-
         }
         return chemin.toString();
     }
