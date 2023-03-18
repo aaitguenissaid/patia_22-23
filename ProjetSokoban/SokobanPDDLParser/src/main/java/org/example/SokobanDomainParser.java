@@ -84,8 +84,6 @@ public class SokobanDomainParser {
 
             // Objectif
             String _finalState = "";
-            ArrayList<String> toBindBox = new ArrayList<>(); // boites à lier à une destination
-            ArrayList<String> toBindDest = new ArrayList<>(); // destinations à lier à une boite
 
             for (int i = 0; i < nbRows; i++) {
                 int nbCols = lignes[i].length();
@@ -95,17 +93,12 @@ public class SokobanDomainParser {
                     if (this.level[i][j] == box || this.level[i][j] == boxOnStoragePlace) {
                         _boxes += "B" + i + j + " ";
                         _positions += "P" + i + j + " ";
-                        _initialState += "(boxOn " + "P" + i + j + " " + "B" + i + j + ")\n";
+                        _initialState += "(boxOn " + "P" + i + j + ")\n";
                         _initialState = checkForNeighbours(_initialState, i, j, nbRows, nbCols);
 
-                        if (this.level[i][j] == box) {
-                            toBindBox.add("B" + i + j);
-                        }
-
                         if (this.level[i][j] == boxOnStoragePlace) {
-                            _finalState += "(boxOn " + "P" + i + j + " " + "B" + i + j + ")\n";
+                            _finalState += "(boxOn " + "P" + i + j + ")\n";
                         }
-
                     }
 
                     if (this.level[i][j] == floor || this.level[i][j] == destination) {
@@ -114,7 +107,7 @@ public class SokobanDomainParser {
                         _initialState = checkForNeighbours(_initialState, i, j, nbRows, nbCols);
 
                         if (this.level[i][j] == destination) {
-                            toBindDest.add("P" + i + j);
+                            _finalState += "(boxOn " + "P" + i + j + ")\n";   
                         }
 
                     } else if (this.level[i][j] == guard || this.level[i][j] == guardOnStoragePlace) {
@@ -124,12 +117,8 @@ public class SokobanDomainParser {
                         _initialState = checkForNeighbours(_initialState, i, j, nbRows, nbCols);
 
                         if (this.level[i][j] == guardOnStoragePlace) {
-                            toBindDest.add("P" + i + j);
+                            _finalState += "(boxOn " + "P" + i + j + ")\n";
                         }
-                    }
-
-                    if (!toBindBox.isEmpty() && !toBindDest.isEmpty()) {
-                        _finalState += "(boxOn " + toBindDest.remove(toBindDest.size() - 1) + " " + toBindBox.remove(toBindBox.size() - 1) + ")\n";
                     }
                 }
 

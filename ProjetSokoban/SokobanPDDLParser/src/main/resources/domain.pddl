@@ -18,16 +18,16 @@
         position guard box case 
     )
 
-    (:constants
-        free - position
-        box - position
-    )
+    ;;;(:constants
+    ;;;    free - position
+    ;;;    box - position
+    ;;;)
 
     (:predicates
         (guardOn ?x - position ?y - guard)
-        (boxOn ?x - position ?y - box)
+        (boxOn ?x - position)
         (isNeighbor ?x - position ?y - position ?how - direction)
-        (isFree ?x)
+        (isFree ?x - position)
     )
 
     (:action move
@@ -44,12 +44,13 @@
 
     (:action push
         :parameters (?g - guard ?box - box ?from - position ?middle - position ?to - position ?how - direction)
-        :precondition (and (guardOn ?from ?g) (boxOn ?middle ?box) 
+        :precondition (and (guardOn ?from ?g) (boxOn ?middle) 
                            (isFree ?to) 
                            (isNeighbor ?from ?middle ?how) (isNeighbor ?middle ?to ?how))
         :effect (and (not (guardOn ?from ?g)) (guardOn ?middle ?g) 
-                     (not (boxOn ?middle ?box)) (boxOn ?to ?box)
+                     (not (boxOn ?middle)) (boxOn ?to)
                      (isFree ?from) (not (isFree ?to)))
+                     
     )
 
  )   
