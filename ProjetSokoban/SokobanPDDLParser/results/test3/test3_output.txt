@@ -1,0 +1,80 @@
+[ ####,  # @#, ##$*###, #  .  #, # #.  #, # $  ##, ###  #,   ####]
+ ####
+ # @#
+##$*###
+#  .  #
+# #.  #
+# $  ##
+###  #
+  ####
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "Scoria-Level3.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. Unable to attach even with module exceptions: [org.openjdk.jol.vm.sa.SASupportException: Sense failed., org.openjdk.jol.vm.sa.SASupportException: Sense failed., org.openjdk.jol.vm.sa.SASupportException: Sense failed.]
+
+problem instantiation done successfully (132 actions, 118 fluents)
+
+* Starting ASTAR search with MAX heuristic 
+* ASTAR search succeeded
+
+found plan as follows:
+
+00: ( push g13 b22 p13 p23 p33 down) [0]
+01: ( push g13 b22 p23 p33 p43 down) [0]
+02: (         move g13 p33 p32 left) [0]
+03: (         move g13 p32 p31 left) [0]
+04: (         move g13 p31 p41 down) [0]
+05: (         move g13 p41 p51 down) [0]
+06: (push g13 b22 p51 p52 p53 right) [0]
+07: (push g13 b22 p52 p53 p54 right) [0]
+08: (         move g13 p53 p63 down) [0]
+09: (        move g13 p63 p64 right) [0]
+10: (   push g13 b22 p64 p54 p44 up) [0]
+11: (   push g13 b22 p54 p44 p34 up) [0]
+12: (         move g13 p44 p54 down) [0]
+13: (         move g13 p54 p53 left) [0]
+14: (         move g13 p53 p52 left) [0]
+15: (         move g13 p52 p51 left) [0]
+16: (           move g13 p51 p41 up) [0]
+17: (           move g13 p41 p31 up) [0]
+18: (        move g13 p31 p32 right) [0]
+19: (        move g13 p32 p33 right) [0]
+20: (           move g13 p33 p23 up) [0]
+21: (           move g13 p23 p13 up) [0]
+22: (         move g13 p13 p12 left) [0]
+23: ( push g13 b22 p12 p22 p32 down) [0]
+24: (        move g13 p22 p23 right) [0]
+25: (         move g13 p23 p33 down) [0]
+26: ( push g13 b22 p33 p43 p53 down) [0]
+27: (        move g13 p43 p44 right) [0]
+28: (        move g13 p44 p45 right) [0]
+29: (           move g13 p45 p35 up) [0]
+30: ( push g13 b22 p35 p34 p33 left) [0]
+31: (         move g13 p34 p44 down) [0]
+32: (         move g13 p44 p43 left) [0]
+33: (   push g13 b22 p43 p33 p23 up) [0]
+34: (         move g13 p33 p43 down) [0]
+35: (        move g13 p43 p44 right) [0]
+36: (         move g13 p44 p54 down) [0]
+37: (         move g13 p54 p64 down) [0]
+38: (         move g13 p64 p63 left) [0]
+39: (   push g13 b22 p63 p53 p43 up) [0]
+40: (         move g13 p53 p52 left) [0]
+41: (         move g13 p52 p51 left) [0]
+42: (           move g13 p51 p41 up) [0]
+43: (           move g13 p41 p31 up) [0]
+44: (push g13 b22 p31 p32 p33 right) [0]
+
+time spent:       0.06 seconds parsing 
+                  0.17 seconds encoding 
+                  0.50 seconds searching
+                  0.73 seconds total time
+
+memory used:      0.77 MBytes for problem representation
+                  0.94 MBytes for searching
+                  1.71 MBytes total
+
+
+Done

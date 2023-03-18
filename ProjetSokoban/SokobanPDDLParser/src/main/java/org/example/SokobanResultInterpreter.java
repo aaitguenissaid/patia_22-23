@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class SokobanResultInterpreter {
     public static void main(String[] args) throws IOException {
-        String filename = args[0]+"_filtered_output.txt";
+        String filename = "results/"+args[0]+"/"+args[0]+"_filtered_output.txt";
         String[] input = parseInputFile(filename);
         String[] actions = input[0].split("\n");
         String chemin = getPath(actions);

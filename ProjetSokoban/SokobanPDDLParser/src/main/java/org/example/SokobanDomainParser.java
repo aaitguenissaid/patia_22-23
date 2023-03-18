@@ -132,7 +132,7 @@ public class SokobanDomainParser {
             String _directions = " left right up down - direction ";
 
             // Création du fichier
-            File file = new File(this.title + ".pddl");
+            File file = new File("results/PDDLproblems/"+this.title + ".pddl");
             FileWriter writer = new FileWriter(file);
             writer.write("(define (problem " + this.title + ")\n");
             writer.write("(:domain " + this.domain + ")\n");

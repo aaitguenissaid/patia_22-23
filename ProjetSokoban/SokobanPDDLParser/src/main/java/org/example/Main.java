@@ -9,7 +9,7 @@ public class Main {
         sokobanDomainParser.parse("../sokoban-master/config/"+args[0]+".json");
 
         SokobanSolutionSolver sokobanSolutionSolver = new SokobanSolutionSolver();
-        sokobanSolutionSolver.solve(domain,sokobanDomainParser.title + ".pddl");
+        sokobanSolutionSolver.solve(domain,"results/PDDLproblems/" + sokobanDomainParser.title + ".pddl");
         System.out.println("Done");
 
     }

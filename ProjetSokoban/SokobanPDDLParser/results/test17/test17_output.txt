@@ -1,0 +1,159 @@
+[  #####,  ##   #, ##  # #, # .$* ###, # #     #, #  **   #, ## @#####,  ####]
+  #####
+ ##   #
+##  # #
+# .$* ###
+# #     #
+#  **   #
+## @#####
+ ####
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "Scoria2-Level7.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. Unable to attach even with module exceptions: [org.openjdk.jol.vm.sa.SASupportException: Sense failed., org.openjdk.jol.vm.sa.SASupportException: Sense failed., org.openjdk.jol.vm.sa.SASupportException: Sense failed.]
+
+problem instantiation done successfully (226 actions, 155 fluents)
+
+* Starting ASTAR search with MAX heuristic 
+* ASTAR search succeeded
+
+found plan as follows:
+
+000: (         move g63 p63 p62 left) [0]
+001: (           move g63 p62 p52 up) [0]
+002: (         move g63 p52 p51 left) [0]
+003: (           move g63 p51 p41 up) [0]
+004: (           move g63 p41 p31 up) [0]
+005: (        move g63 p31 p32 right) [0]
+006: (           move g63 p32 p22 up) [0]
+007: (        move g63 p22 p23 right) [0]
+008: (           move g63 p23 p13 up) [0]
+009: (        move g63 p13 p14 right) [0]
+010: (        move g63 p14 p15 right) [0]
+011: (         move g63 p15 p25 down) [0]
+012: (         move g63 p25 p35 down) [0]
+013: (         move g63 p35 p45 down) [0]
+014: (         move g63 p45 p44 left) [0]
+015: (         move g63 p44 p43 left) [0]
+016: (   push g63 b33 p43 p33 p23 up) [0]
+017: (         move g63 p33 p32 left) [0]
+018: (         move g63 p32 p31 left) [0]
+019: (         move g63 p31 p41 down) [0]
+020: (         move g63 p41 p51 down) [0]
+021: (        move g63 p51 p52 right) [0]
+022: (         move g63 p52 p62 down) [0]
+023: (        move g63 p62 p63 right) [0]
+024: (   push g63 b33 p63 p53 p43 up) [0]
+025: (push g63 b33 p53 p54 p55 right) [0]
+026: (push g63 b33 p54 p55 p56 right) [0]
+027: (         move g63 p55 p54 left) [0]
+028: (         move g63 p54 p53 left) [0]
+029: (         move g63 p53 p52 left) [0]
+030: (         move g63 p52 p51 left) [0]
+031: (           move g63 p51 p41 up) [0]
+032: (           move g63 p41 p31 up) [0]
+033: (        move g63 p31 p32 right) [0]
+034: (        move g63 p32 p33 right) [0]
+035: ( push g63 b33 p33 p43 p53 down) [0]
+036: (        move g63 p43 p44 right) [0]
+037: (        move g63 p44 p45 right) [0]
+038: (           move g63 p45 p35 up) [0]
+039: (           move g63 p35 p25 up) [0]
+040: (           move g63 p25 p15 up) [0]
+041: (         move g63 p15 p14 left) [0]
+042: (         move g63 p14 p13 left) [0]
+043: ( push g63 b33 p13 p23 p33 down) [0]
+044: ( push g63 b33 p23 p33 p43 down) [0]
+045: (push g63 b33 p33 p34 p35 right) [0]
+046: (         move g63 p34 p33 left) [0]
+047: (         move g63 p33 p32 left) [0]
+048: (         move g63 p32 p31 left) [0]
+049: (         move g63 p31 p41 down) [0]
+050: (         move g63 p41 p51 down) [0]
+051: (        move g63 p51 p52 right) [0]
+052: (push g63 b33 p52 p53 p54 right) [0]
+053: (   push g63 b33 p53 p43 p33 up) [0]
+054: (         move g63 p43 p53 down) [0]
+055: (         move g63 p53 p52 left) [0]
+056: (         move g63 p52 p51 left) [0]
+057: (           move g63 p51 p41 up) [0]
+058: (           move g63 p41 p31 up) [0]
+059: (        move g63 p31 p32 right) [0]
+060: (push g63 b33 p32 p33 p34 right) [0]
+061: (         move g63 p33 p43 down) [0]
+062: (        move g63 p43 p44 right) [0]
+063: (        move g63 p44 p45 right) [0]
+064: (         move g63 p45 p55 down) [0]
+065: ( push g63 b33 p55 p54 p53 left) [0]
+066: (           move g63 p54 p44 up) [0]
+067: (        move g63 p44 p45 right) [0]
+068: (        move g63 p45 p46 right) [0]
+069: (        move g63 p46 p47 right) [0]
+070: (         move g63 p47 p57 down) [0]
+071: ( push g63 b33 p57 p56 p55 left) [0]
+072: ( push g63 b33 p56 p55 p54 left) [0]
+073: (           move g63 p55 p45 up) [0]
+074: (         move g63 p45 p44 left) [0]
+075: (         move g63 p44 p43 left) [0]
+076: (           move g63 p43 p33 up) [0]
+077: (           move g63 p33 p23 up) [0]
+078: (           move g63 p23 p13 up) [0]
+079: (        move g63 p13 p14 right) [0]
+080: (        move g63 p14 p15 right) [0]
+081: (         move g63 p15 p25 down) [0]
+082: ( push g63 b33 p25 p35 p45 down) [0]
+083: ( push g63 b33 p35 p34 p33 left) [0]
+084: (         move g63 p34 p44 down) [0]
+085: (         move g63 p44 p43 left) [0]
+086: (   push g63 b33 p43 p33 p23 up) [0]
+087: (         move g63 p33 p32 left) [0]
+088: (         move g63 p32 p31 left) [0]
+089: (         move g63 p31 p41 down) [0]
+090: (         move g63 p41 p51 down) [0]
+091: (        move g63 p51 p52 right) [0]
+092: (         move g63 p52 p62 down) [0]
+093: (        move g63 p62 p63 right) [0]
+094: (   push g63 b33 p63 p53 p43 up) [0]
+095: (   push g63 b33 p53 p43 p33 up) [0]
+096: (        move g63 p43 p44 right) [0]
+097: (push g63 b33 p44 p45 p46 right) [0]
+098: (         move g63 p45 p55 down) [0]
+099: (        move g63 p55 p56 right) [0]
+100: (        move g63 p56 p57 right) [0]
+101: (           move g63 p57 p47 up) [0]
+102: ( push g63 b33 p47 p46 p45 left) [0]
+103: ( push g63 b33 p46 p45 p44 left) [0]
+104: (           move g63 p45 p35 up) [0]
+105: (         move g63 p35 p34 left) [0]
+106: ( push g63 b33 p34 p33 p32 left) [0]
+107: (         move g63 p33 p43 down) [0]
+108: (         move g63 p43 p53 down) [0]
+109: (push g63 b33 p53 p54 p55 right) [0]
+110: (   push g63 b33 p54 p44 p34 up) [0]
+111: (        move g63 p44 p45 right) [0]
+112: (        move g63 p45 p46 right) [0]
+113: (         move g63 p46 p56 down) [0]
+114: ( push g63 b33 p56 p55 p54 left) [0]
+115: (           move g63 p55 p45 up) [0]
+116: (           move g63 p45 p35 up) [0]
+117: (           move g63 p35 p25 up) [0]
+118: (           move g63 p25 p15 up) [0]
+119: (         move g63 p15 p14 left) [0]
+120: (         move g63 p14 p13 left) [0]
+121: ( push g63 b33 p13 p23 p33 down) [0]
+122: ( push g63 b33 p23 p33 p43 down) [0]
+123: ( push g63 b33 p33 p43 p53 down) [0]
+
+time spent:       0.05 seconds parsing 
+                  0.24 seconds encoding 
+                  4.19 seconds searching
+                  4.48 seconds total time
+
+memory used:      1.30 MBytes for problem representation
+                 17.39 MBytes for searching
+                 18.69 MBytes total
+
+
+Done

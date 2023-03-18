@@ -1,0 +1,151 @@
+[ #####, ##   ###, #  ..  #, # #.$# #, #   *  #, ###$$###,   #@ #,   ####]
+ #####
+##   ###
+#  ..  #
+# #.$# #
+#   *  #
+###$$###
+  #@ #
+  ####
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "Scoria2-Level3.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. Unable to attach even with module exceptions: [org.openjdk.jol.vm.sa.SASupportException: Sense failed., org.openjdk.jol.vm.sa.SASupportException: Sense failed., org.openjdk.jol.vm.sa.SASupportException: Sense failed.]
+
+problem instantiation done successfully (204 actions, 144 fluents)
+
+* Starting ASTAR search with MAX heuristic 
+* ASTAR search succeeded
+
+found plan as follows:
+
+000: (   push g63 b34 p63 p53 p43 up) [0]
+001: (   push g63 b34 p53 p43 p33 up) [0]
+002: (         move g63 p43 p42 left) [0]
+003: (         move g63 p42 p41 left) [0]
+004: (           move g63 p41 p31 up) [0]
+005: (           move g63 p31 p21 up) [0]
+006: (        move g63 p21 p22 right) [0]
+007: (        move g63 p22 p23 right) [0]
+008: (        move g63 p23 p24 right) [0]
+009: (        move g63 p24 p25 right) [0]
+010: (        move g63 p25 p26 right) [0]
+011: (         move g63 p26 p36 down) [0]
+012: (         move g63 p36 p46 down) [0]
+013: (         move g63 p46 p45 left) [0]
+014: ( push g63 b34 p45 p44 p43 left) [0]
+015: (   push g63 b34 p44 p34 p24 up) [0]
+016: (         move g63 p34 p44 down) [0]
+017: ( push g63 b34 p44 p43 p42 left) [0]
+018: (         move g63 p43 p53 down) [0]
+019: (         move g63 p53 p63 down) [0]
+020: (        move g63 p63 p64 right) [0]
+021: (   push g63 b34 p64 p54 p44 up) [0]
+022: (   push g63 b34 p54 p44 p34 up) [0]
+023: (        move g63 p44 p45 right) [0]
+024: (        move g63 p45 p46 right) [0]
+025: (           move g63 p46 p36 up) [0]
+026: (           move g63 p36 p26 up) [0]
+027: (         move g63 p26 p25 left) [0]
+028: ( push g63 b34 p25 p24 p23 left) [0]
+029: (           move g63 p24 p14 up) [0]
+030: (         move g63 p14 p13 left) [0]
+031: (         move g63 p13 p12 left) [0]
+032: (         move g63 p12 p22 down) [0]
+033: (push g63 b34 p22 p23 p24 right) [0]
+034: ( push g63 b34 p23 p33 p43 down) [0]
+035: ( push g63 b34 p33 p43 p53 down) [0]
+036: (        move g63 p43 p44 right) [0]
+037: (        move g63 p44 p45 right) [0]
+038: (        move g63 p45 p46 right) [0]
+039: (           move g63 p46 p36 up) [0]
+040: (           move g63 p36 p26 up) [0]
+041: (         move g63 p26 p25 left) [0]
+042: ( push g63 b34 p25 p24 p23 left) [0]
+043: (           move g63 p24 p14 up) [0]
+044: (         move g63 p14 p13 left) [0]
+045: ( push g63 b34 p13 p23 p33 down) [0]
+046: (        move g63 p23 p24 right) [0]
+047: (        move g63 p24 p25 right) [0]
+048: (        move g63 p25 p26 right) [0]
+049: (         move g63 p26 p36 down) [0]
+050: (         move g63 p36 p46 down) [0]
+051: (         move g63 p46 p45 left) [0]
+052: (         move g63 p45 p44 left) [0]
+053: (   push g63 b34 p44 p34 p24 up) [0]
+054: (         move g63 p34 p44 down) [0]
+055: (        move g63 p44 p45 right) [0]
+056: (        move g63 p45 p46 right) [0]
+057: (           move g63 p46 p36 up) [0]
+058: (           move g63 p36 p26 up) [0]
+059: (         move g63 p26 p25 left) [0]
+060: ( push g63 b34 p25 p24 p23 left) [0]
+061: (           move g63 p24 p14 up) [0]
+062: (         move g63 p14 p13 left) [0]
+063: (         move g63 p13 p12 left) [0]
+064: (         move g63 p12 p22 down) [0]
+065: (push g63 b34 p22 p23 p24 right) [0]
+066: (push g63 b34 p23 p24 p25 right) [0]
+067: (         move g63 p24 p34 down) [0]
+068: (         move g63 p34 p44 down) [0]
+069: (         move g63 p44 p43 left) [0]
+070: (   push g63 b34 p43 p33 p23 up) [0]
+071: (         move g63 p33 p43 down) [0]
+072: (        move g63 p43 p44 right) [0]
+073: (         move g63 p44 p54 down) [0]
+074: (         move g63 p54 p64 down) [0]
+075: (         move g63 p64 p63 left) [0]
+076: (   push g63 b34 p63 p53 p43 up) [0]
+077: (   push g63 b34 p53 p43 p33 up) [0]
+078: (        move g63 p43 p44 right) [0]
+079: (           move g63 p44 p34 up) [0]
+080: (           move g63 p34 p24 up) [0]
+081: (           move g63 p24 p14 up) [0]
+082: (         move g63 p14 p13 left) [0]
+083: (         move g63 p13 p12 left) [0]
+084: (         move g63 p12 p22 down) [0]
+085: (         move g63 p22 p21 left) [0]
+086: (         move g63 p21 p31 down) [0]
+087: (         move g63 p31 p41 down) [0]
+088: (push g63 b34 p41 p42 p43 right) [0]
+089: (push g63 b34 p42 p43 p44 right) [0]
+090: (         move g63 p43 p42 left) [0]
+091: (         move g63 p42 p41 left) [0]
+092: (           move g63 p41 p31 up) [0]
+093: (           move g63 p31 p21 up) [0]
+094: (        move g63 p21 p22 right) [0]
+095: (           move g63 p22 p12 up) [0]
+096: (        move g63 p12 p13 right) [0]
+097: (        move g63 p13 p14 right) [0]
+098: (         move g63 p14 p24 down) [0]
+099: (         move g63 p24 p34 down) [0]
+100: ( push g63 b34 p34 p44 p54 down) [0]
+101: (        move g63 p44 p45 right) [0]
+102: (        move g63 p45 p46 right) [0]
+103: (           move g63 p46 p36 up) [0]
+104: (           move g63 p36 p26 up) [0]
+105: ( push g63 b34 p26 p25 p24 left) [0]
+106: (        move g63 p25 p26 right) [0]
+107: (         move g63 p26 p36 down) [0]
+108: (         move g63 p36 p46 down) [0]
+109: (         move g63 p46 p45 left) [0]
+110: (         move g63 p45 p44 left) [0]
+111: (         move g63 p44 p43 left) [0]
+112: (         move g63 p43 p53 down) [0]
+113: (         move g63 p53 p63 down) [0]
+114: (        move g63 p63 p64 right) [0]
+115: (   push g63 b34 p64 p54 p44 up) [0]
+
+time spent:       0.06 seconds parsing 
+                  0.22 seconds encoding 
+                  3.12 seconds searching
+                  3.39 seconds total time
+
+memory used:      1.16 MBytes for problem representation
+                 13.74 MBytes for searching
+                 14.90 MBytes total
+
+
+Done

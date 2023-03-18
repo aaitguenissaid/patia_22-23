@@ -1,0 +1,126 @@
+[##########, #    #   #, # # .*   #, #  $.*@  #, ###$ #####,   #  #,   ####]
+##########
+#    #   #
+# # .*   #
+#  $.*@  #
+###$ #####
+  #  #
+  ####
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "Scoria2-Level9.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. Unable to attach even with module exceptions: [org.openjdk.jol.vm.sa.SASupportException: Sense failed., org.openjdk.jol.vm.sa.SASupportException: Sense failed., org.openjdk.jol.vm.sa.SASupportException: Sense failed.]
+
+problem instantiation done successfully (256 actions, 165 fluents)
+
+* Starting ASTAR search with MAX heuristic 
+* ASTAR search succeeded
+
+found plan as follows:
+
+00: (           move g36 p36 p26 up) [0]
+01: ( push g36 b25 p26 p25 p24 left) [0]
+02: ( push g36 b25 p25 p24 p23 left) [0]
+03: (         move g36 p24 p34 down) [0]
+04: (push g36 b25 p34 p35 p36 right) [0]
+05: (push g36 b25 p35 p36 p37 right) [0]
+06: (         move g36 p36 p35 left) [0]
+07: (         move g36 p35 p34 left) [0]
+08: (           move g36 p34 p24 up) [0]
+09: (           move g36 p24 p14 up) [0]
+10: (         move g36 p14 p13 left) [0]
+11: (         move g36 p13 p12 left) [0]
+12: (         move g36 p12 p11 left) [0]
+13: (         move g36 p11 p21 down) [0]
+14: (         move g36 p21 p31 down) [0]
+15: (        move g36 p31 p32 right) [0]
+16: (push g36 b25 p32 p33 p34 right) [0]
+17: (push g36 b25 p33 p34 p35 right) [0]
+18: (         move g36 p34 p44 down) [0]
+19: (         move g36 p44 p54 down) [0]
+20: (         move g36 p54 p53 left) [0]
+21: (   push g36 b25 p53 p43 p33 up) [0]
+22: (        move g36 p43 p44 right) [0]
+23: (           move g36 p44 p34 up) [0]
+24: (           move g36 p34 p24 up) [0]
+25: (           move g36 p24 p14 up) [0]
+26: (         move g36 p14 p13 left) [0]
+27: (         move g36 p13 p12 left) [0]
+28: (         move g36 p12 p11 left) [0]
+29: (         move g36 p11 p21 down) [0]
+30: (         move g36 p21 p31 down) [0]
+31: (        move g36 p31 p32 right) [0]
+32: (push g36 b25 p32 p33 p34 right) [0]
+33: (         move g36 p33 p43 down) [0]
+34: (        move g36 p43 p44 right) [0]
+35: (   push g36 b25 p44 p34 p24 up) [0]
+36: (         move g36 p34 p33 left) [0]
+37: (         move g36 p33 p32 left) [0]
+38: (         move g36 p32 p31 left) [0]
+39: (           move g36 p31 p21 up) [0]
+40: (           move g36 p21 p11 up) [0]
+41: (        move g36 p11 p12 right) [0]
+42: (        move g36 p12 p13 right) [0]
+43: ( push g36 b25 p13 p23 p33 down) [0]
+44: (push g36 b25 p23 p24 p25 right) [0]
+45: (push g36 b25 p24 p25 p26 right) [0]
+46: (push g36 b25 p25 p26 p27 right) [0]
+47: (         move g36 p26 p36 down) [0]
+48: ( push g36 b25 p36 p35 p34 left) [0]
+49: (           move g36 p35 p25 up) [0]
+50: (         move g36 p25 p24 left) [0]
+51: ( push g36 b25 p24 p34 p44 down) [0]
+52: ( push g36 b25 p34 p33 p32 left) [0]
+53: (         move g36 p33 p43 down) [0]
+54: (         move g36 p43 p53 down) [0]
+55: (        move g36 p53 p54 right) [0]
+56: (   push g36 b25 p54 p44 p34 up) [0]
+57: (   push g36 b25 p44 p34 p24 up) [0]
+58: (         move g36 p34 p33 left) [0]
+59: (           move g36 p33 p23 up) [0]
+60: (push g36 b25 p23 p24 p25 right) [0]
+61: (           move g36 p24 p14 up) [0]
+62: (         move g36 p14 p13 left) [0]
+63: (         move g36 p13 p12 left) [0]
+64: (         move g36 p12 p11 left) [0]
+65: (         move g36 p11 p21 down) [0]
+66: (         move g36 p21 p31 down) [0]
+67: (push g36 b25 p31 p32 p33 right) [0]
+68: (push g36 b25 p32 p33 p34 right) [0]
+69: (         move g36 p33 p43 down) [0]
+70: (        move g36 p43 p44 right) [0]
+71: (   push g36 b25 p44 p34 p24 up) [0]
+72: (        move g36 p34 p35 right) [0]
+73: (        move g36 p35 p36 right) [0]
+74: (           move g36 p36 p26 up) [0]
+75: (           move g36 p26 p16 up) [0]
+76: (        move g36 p16 p17 right) [0]
+77: (        move g36 p17 p18 right) [0]
+78: (         move g36 p18 p28 down) [0]
+79: (         move g36 p28 p38 down) [0]
+80: ( push g36 b25 p38 p37 p36 left) [0]
+81: ( push g36 b25 p37 p36 p35 left) [0]
+82: ( push g36 b25 p36 p35 p34 left) [0]
+83: (        move g36 p35 p36 right) [0]
+84: (           move g36 p36 p26 up) [0]
+85: (           move g36 p26 p16 up) [0]
+86: (        move g36 p16 p17 right) [0]
+87: ( push g36 b25 p17 p27 p37 down) [0]
+88: (        move g36 p27 p28 right) [0]
+89: (         move g36 p28 p38 down) [0]
+90: ( push g36 b25 p38 p37 p36 left) [0]
+91: ( push g36 b25 p37 p36 p35 left) [0]
+
+time spent:       0.06 seconds parsing 
+                  0.24 seconds encoding 
+                  6.33 seconds searching
+                  6.62 seconds total time
+
+memory used:      1.42 MBytes for problem representation
+                 31.63 MBytes for searching
+                 33.05 MBytes total
+
+
+Done
