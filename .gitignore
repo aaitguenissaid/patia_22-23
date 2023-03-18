@@ -31,4 +31,5 @@ ProjetSokoban/SokobanPDDLParser/target/
 ProjetSokoban/SokobanPDDLParser/Scoria*-Level*.pddl
 
 #IDE
-ProjetSokoban/SokobanPDDLParser/.idea/
+ProjetSokoban/SokobanPDDLParser/.idea
+sokoban/parsers/.idea
