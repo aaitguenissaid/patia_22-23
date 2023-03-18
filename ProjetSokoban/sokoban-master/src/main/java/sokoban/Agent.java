@@ -10,7 +10,7 @@ public class Agent {
     public static void main(String[] args) {
         String fileName = System.getProperty("fileName");
         String solution = "";
-        String fileToPath = "/home/agsa/Documents/Studies/M1/PATIA/patia_22-23/ProjetSokoban/SokobanPDDLParser/" + fileName + "_path.txt";
+        String fileToPath = "../SokobanPDDLParser/" + fileName + "_path.txt";
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(fileToPath));
