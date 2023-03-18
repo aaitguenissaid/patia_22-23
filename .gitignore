@@ -24,11 +24,7 @@ hs_err_pid*
 
 
 # generated files
-ProjetSokoban/SokobanPDDLParser/chemin.txt
-ProjetSokoban/SokobanPDDLParser/filtered_output.txt
-ProjetSokoban/SokobanPDDLParser/output.txt
-ProjetSokoban/SokobanPDDLParser/target/
-ProjetSokoban/SokobanPDDLParser/Scoria*-Level*.pddl
+ProjetSokoban/SokobanPDDLParser/target
 
 #IDE
 ProjetSokoban/SokobanPDDLParser/.idea

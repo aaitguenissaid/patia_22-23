@@ -1,4 +1,5 @@
 #!/bin/bash
 
 # Nettoyer projet maven
-mvn clean package
+mvn -q clean
+mvn package
