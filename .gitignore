@@ -29,3 +29,5 @@ ProjetSokoban/SokobanPDDLParser/target
 #IDE
 ProjetSokoban/SokobanPDDLParser/.idea
 sokoban/parsers/.idea
+SAT/.idea/
+SAT/SAT.iml
