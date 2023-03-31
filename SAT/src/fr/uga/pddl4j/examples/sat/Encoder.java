@@ -17,7 +17,7 @@ public class Encoder {
     public Encoder(Problem problem) {
         this.problem = problem;
     }
-
+    // encode a problem in SAT-CNF
     public ArrayList<Integer> encode(){
 
         ArrayList<Integer> encodedProblem = new ArrayList<>();

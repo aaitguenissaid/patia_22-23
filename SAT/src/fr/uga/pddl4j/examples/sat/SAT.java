@@ -70,7 +70,7 @@ public class SAT extends AbstractPlanner {
     }
 
     /**
-     * Search a solution plan to a specified domain and problem using A*.
+     * Search a solution plan to a specified encoded problem using SAT4J.
      *
      * @param problem the problem to solve.
      * @return the plan found or null if no plan was found.
