@@ -1,6 +1,7 @@
 package sat;
 
 import fr.uga.pddl4j.problem.Problem;
+import fr.uga.pddl4j.problem.numeric.NumericVariable;
 import fr.uga.pddl4j.problem.operator.Action;
 import fr.uga.pddl4j.util.BitVector;
 
@@ -25,25 +26,25 @@ public class Encoder {
         // get toutes les actions
         List<Action> actions = problem.getActions();
 
+        System.out.println("Initial State");
+
+        System.out.println("Initial State Positive Fluents : " + problem.getInitialState().getPositiveFluents()+"\n");
+
+
         // fluent = propositions
 
+        // get tous les actions
         for (Action a: actions) {
-            System.out.println(a);
+            System.out.println("action : " + a.getName());
+            System.out.println("Precondition Positive Fluents : " + a.getPrecondition().getPositiveFluents());
+            System.out.println("UnconditionalEffect Positive Fluents : " + a.getUnconditionalEffect().getPositiveFluents()+"\n");
 
-            BitVector act = a.getPrecondition().getPositiveFluents();
-            BitVector posFluents = a.getUnconditionalEffect().getPositiveFluents();
-            BitVector negFluents = a.getUnconditionalEffect().getNegativeFluents();
-
-            System.out.println("act :" + act);
-            System.out.println("posfluents :" + posFluents);
-            System.out.println("negfluents :" + negFluents);
-
-
-            //BitVector posConds = a.getPrecondition().getPositiveFluents();
-            BitVector p = a.getPrecondition().getNegativeFluents();
-
-
+            //how to
         }
+
+        System.out.println("\nGoal State");
+        System.out.println("Goal State Positive Fluents : " + problem.getGoal().getPositiveFluents());
+        System.out.println("Goal State Negative Fluents : " + problem.getGoal().getNegativeFluents());
 
         //        for (int i = 0; i < pb.getActions().size(); i++) {
         //            Action a = pb.getActions().get(0);
