@@ -22,6 +22,8 @@ public class Encoder {
     public ArrayList<Integer> encode(){
 
         ArrayList<Integer> encodedProblem = new ArrayList<>();
+        //how to calculate the cnf formula that will be passed to the SAT solver
+
 
         // get toutes les actions
         List<Action> actions = problem.getActions();
@@ -39,7 +41,6 @@ public class Encoder {
             System.out.println("Precondition Positive Fluents : " + a.getPrecondition().getPositiveFluents());
             System.out.println("UnconditionalEffect Positive Fluents : " + a.getUnconditionalEffect().getPositiveFluents()+"\n");
 
-            //how to
         }
 
         System.out.println("\nGoal State");
