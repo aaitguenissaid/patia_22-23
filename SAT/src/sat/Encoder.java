@@ -1,4 +1,4 @@
-package fr.uga.pddl4j.examples.sat;
+package sat;
 
 import fr.uga.pddl4j.problem.Problem;
 import fr.uga.pddl4j.problem.operator.Action;
@@ -28,9 +28,16 @@ public class Encoder {
         // fluent = propositions
 
         for (Action a: actions) {
-            BitVector act = a.get
+            System.out.println(a);
+
+            BitVector act = a.getPrecondition().getPositiveFluents();
             BitVector posFluents = a.getUnconditionalEffect().getPositiveFluents();
             BitVector negFluents = a.getUnconditionalEffect().getNegativeFluents();
+
+            System.out.println("act :" + act);
+            System.out.println("posfluents :" + posFluents);
+            System.out.println("negfluents :" + negFluents);
+
 
             //BitVector posConds = a.getPrecondition().getPositiveFluents();
             BitVector p = a.getPrecondition().getNegativeFluents();

@@ -1,21 +1,11 @@
-package fr.uga.pddl4j.examples.sat;
+package sat;
 
 import fr.uga.pddl4j.heuristics.state.StateHeuristic;
 import fr.uga.pddl4j.parser.DefaultParsedProblem;
-import fr.uga.pddl4j.parser.RequireKey;
 import fr.uga.pddl4j.plan.Plan;
-import fr.uga.pddl4j.plan.SequentialPlan;
 import fr.uga.pddl4j.planners.AbstractPlanner;
-import fr.uga.pddl4j.planners.Planner;
-import fr.uga.pddl4j.planners.PlannerConfiguration;
-import fr.uga.pddl4j.planners.ProblemNotSupportedException;
-import fr.uga.pddl4j.planners.SearchStrategy;
-import fr.uga.pddl4j.planners.statespace.search.StateSpaceSearch;
 import fr.uga.pddl4j.problem.DefaultProblem;
 import fr.uga.pddl4j.problem.Problem;
-import fr.uga.pddl4j.problem.State;
-import fr.uga.pddl4j.problem.operator.Action;
-import fr.uga.pddl4j.problem.operator.ConditionalEffect;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
@@ -78,7 +68,17 @@ public class SAT extends AbstractPlanner {
     @Override
     public Plan solve(final Problem problem) {
 
-        // Creates the A* search strategy
+        //ENCODER LE PROBLEME AVANT DE LE RESOUDRE
+        Encoder satEncoder = new Encoder(problem);      //créer l'encodeur
+        ArrayList<Integer> satProblem = satEncoder.encode();  //récupérer le plan
+
+
+        //FIXME : remplacer le code ci dessous par le solveur sat
+
+        //ISolver solver = SolverFactory.newDefault();
+
+
+        /*// Creates the A* search strategy
         StateSpaceSearch search = StateSpaceSearch.getInstance(SearchStrategy.Name.ASTAR,
                 this.getHeuristic(), this.getHeuristicWeight(), this.getTimeout());
         LOGGER.info("* Starting A* search \n");
@@ -93,7 +93,8 @@ public class SAT extends AbstractPlanner {
             LOGGER.info("* A* search failed\n");
         }
         // Return the plan found or null if the search fails.
-        return plan;
+        return plan;*/
+        return null;
     }
     @Override
     public boolean isSupported(Problem problem) {
