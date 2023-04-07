@@ -1,5 +1,6 @@
 package sat;
 
+
 import fr.uga.pddl4j.heuristics.state.StateHeuristic;
 import fr.uga.pddl4j.parser.DefaultParsedProblem;
 import fr.uga.pddl4j.plan.Plan;
@@ -70,14 +71,30 @@ public class SAT extends AbstractPlanner {
 
         //ENCODER LE PROBLEME AVANT DE LE RESOUDRE
         Encoder satEncoder = new Encoder(problem);      //créer l'encodeur
-        ArrayList<Integer> satProblem = satEncoder.encode();  //récupérer le plan
+        ArrayList<ArrayList<Integer>> satProblem = satEncoder.encode();  //récupérer le plan
+
+        //RESOLUTION DU PROBLEME SAT
+
+        // final int MAXVAR = 1000;
+        // final int NBCLAUSES = 500;
+        // ISolver solver = SolverFactory.newDefault();
+        // solver.setTimeout(3600); // 1 hour timeout
 
 
-        //FIXME : remplacer le code ci dessous par le solveur sat
+        // for(int i=0; i< satProblem.size(); i++){
+        //     int[] clause = new int[satProblem.get(i).size()];
+        //     for(int j=0; j<satProblem.get(i).size(); j++){
+        //         clause[j] = satProblem.get(i).get(j);
+        //     }
+        //     solver.addClause(new VecInt(clause));
+        // }
+        // foreach (ArrayList<Integer> clause : satProblem) {
+        //     int[] formattedClause = clause.stream().mapToInt(i -> i).toArray();
+        //     solver.addClause(new VecInt(formattedClause));
+        // }
 
-        //ISolver solver = SolverFactory.newDefault();
 
-
+        // OLD CODE : A* SEARCH
         /*// Creates the A* search strategy
         StateSpaceSearch search = StateSpaceSearch.getInstance(SearchStrategy.Name.ASTAR,
                 this.getHeuristic(), this.getHeuristicWeight(), this.getTimeout());
