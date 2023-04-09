@@ -71,7 +71,9 @@ public class SAT extends AbstractPlanner {
 
         //ENCODER LE PROBLEME AVANT DE LE RESOUDRE
         Encoder satEncoder = new Encoder(problem);      //créer l'encodeur
-        ArrayList<ArrayList<Integer>> satProblem = satEncoder.encode();  //récupérer le plan
+        // TODO : get the value of steps from command line
+        int steps = 3;
+        ArrayList<ArrayList<Integer>> satProblem = satEncoder.encode(steps);  //récupérer le plan
 
         //RESOLUTION DU PROBLEME SAT
 
