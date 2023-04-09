@@ -11,8 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.*;
-
 public class Encoder {
 
     private final Problem problem;
@@ -21,22 +19,34 @@ public class Encoder {
         this.problem = problem;
     }
 
+    private int getIndex(int iteration, int firstIndex, int step, int nbVariables) {
+        return (iteration + firstIndex) + (step * nbVariables);
+    }
+
+    private int getPreviousIndex(int index, int nbVariables) {
+        if (index < 0) index = -index;
+        if (index <= nbVariables)
+            System.err.println("Error: index=" + index + " is smaller than nbVariables=" + nbVariables + " -> does not have a previous index");
+        return index - nbVariables;
+    }
+
     public ArrayList<ArrayList<Integer>> encode(int steps) {
 
         ArrayList<ArrayList<Integer>> encodedProblem = new ArrayList<>();
 
         // get toutes les actions
         List<Action> actions = problem.getActions();
-        int nbActions = actions.size();
         List<Fluent> fluents = problem.getFluents();
-        int nbFluents = fluents.size();
 
+        int nbActions = actions.size();
+        int nbFluents = fluents.size();
         int nbVariables = nbFluents + nbActions;
+        System.out.println("nbActions = " + nbActions);
+        System.out.println("nbFluents = " + nbFluents);
+        System.out.println("nbVariables = " + nbVariables);
 
         int fluentsFirstIndex = 1;
-
-        int actionsFirstIndex = (int) pow(2, ceil(log(nbFluents * (steps + 1)) / log(2)));
-
+        int actionsFirstIndex = nbFluents + 1;
         System.out.println("fluentsFirstIndex = " + fluentsFirstIndex);
         System.out.println("actionsFirstIndex = " + actionsFirstIndex);
 
@@ -59,8 +69,9 @@ public class Encoder {
         encodedProblem.add(initialStateClause);
         System.out.println("initialStateClause : " + initialStateClause);
 
-        // boucle sur les actions
+        // Steps loop
         for (int step = 0; step < steps; step++) {
+            // boucle sur les actions
             for (int j = 0; j < actions.size(); j++) {
                 Action action = actions.get(j);
                 BitVector precondPosAction = action.getPrecondition().getPositiveFluents();
@@ -71,25 +82,25 @@ public class Encoder {
                 ActionFormula actionFormula = new ActionFormula();
 
                 // ajouter le numéro de l'action
-                actionFormula.action = (j + 1) + actionsFirstIndex + (step * nbVariables);
+                actionFormula.action = getIndex(j, actionsFirstIndex, step, nbVariables);
 
                 // ajouter les fluents positifs de la précondition
                 for (int k = 0; k < precondPosAction.size(); k++) {
                     if (precondPosAction.get(k)) {
-                        actionFormula.precondPosAction.add((k + 1) + (step * nbFluents));
+                        actionFormula.precondPosAction.add(getIndex(k, fluentsFirstIndex, step, nbVariables));
                     }
                 }
 
                 // ajouter les fluents positifs de l'effet sur le prochain état
                 for (int k = 0; k < effectPosAction.size(); k++) {
                     if (effectPosAction.get(k)) {
-                        actionFormula.effectPosAction.add((k + 1) + ((step + 1) * nbFluents));
+                        actionFormula.effectPosAction.add(getIndex(k, fluentsFirstIndex, step + 1, nbVariables));
                     }
                 }
                 // ajouter les fluents négatifs de l'effet sur le prochain état
                 for (int k = 0; k < effectNegAction.size(); k++) {
                     if (effectNegAction.get(j)) {
-                        actionFormula.effectNegAction.add(-((k + 1) + ((step + 1) * nbFluents)));
+                        actionFormula.effectNegAction.add(-getIndex(k, fluentsFirstIndex, step + 1, nbVariables));
                     }
                 }
 
@@ -116,7 +127,7 @@ public class Encoder {
                 // A ∨ ¬B ∨ C
                 for (int k = 0; k < actionFormula.effectPosAction.size(); k++) {
                     ArrayList<Integer> transitionClause = new ArrayList<>();
-                    int a = actionFormula.effectPosAction.get(k) - nbFluents;
+                    int a = getPreviousIndex(actionFormula.effectPosAction.get(k), nbVariables);
                     int b = actionFormula.effectPosAction.get(k);
                     int c = actionFormula.action;
                     //System.out.println(" ¬A ∧ B -> C  : " + -a + " ∧ " + b + " -> " + c);
@@ -134,7 +145,7 @@ public class Encoder {
                 // ¬A ∨ B ∨ C
                 for (int k = 0; k < actionFormula.effectNegAction.size(); k++) {
                     ArrayList<Integer> transitionClause = new ArrayList<>();
-                    int a = (-actionFormula.effectNegAction.get(k)) - nbFluents;
+                    int a = (-actionFormula.effectNegAction.get(k)) - nbVariables;
                     int b = (-actionFormula.effectNegAction.get(k));
                     int c = actionFormula.action;
 
@@ -146,6 +157,19 @@ public class Encoder {
                     encodedProblem.add(transitionClause);
                 }
             }
+
+            System.out.println("\nActions disjunctions " + step + " : ");
+            // Action disjunction: at least one action must be executed at each step.
+            // ¬Ai v ¬Bi
+            for (int i = 0; i < actions.size() - 1; i++) {
+                ArrayList<Integer> actionClause = new ArrayList<>();
+                int action = getIndex(i, actionsFirstIndex, step, nbVariables);
+                int nextAction = action + 1;
+                actionClause.add(-action);
+                actionClause.add(-nextAction);
+                System.out.println("[¬A, ¬(A+1)] : " + actionClause);
+                encodedProblem.add(actionClause);
+            }
         }
 
         System.out.println("\nGoal : ");
@@ -156,7 +180,7 @@ public class Encoder {
         for (int i = 0; i < goalPos.size(); i++) {
             if (goalPos.get(i)) {
                 ArrayList<Integer> goalStateClause = new ArrayList<>();
-                goalStateClause.add((i + 1) + (steps * nbFluents));
+                goalStateClause.add(getIndex(i, fluentsFirstIndex, steps, nbVariables));
                 encodedProblem.add(goalStateClause);
                 System.out.println("goalStateClause : " + goalStateClause);
             }
@@ -164,13 +188,11 @@ public class Encoder {
         for (int i = 0; i < goalNeg.size(); i++) {
             if (goalNeg.get(i)) {
                 ArrayList<Integer> goalStateClause = new ArrayList<>();
-                goalStateClause.add(-((i + 1) + (steps * nbFluents)));
+                goalStateClause.add(-getIndex(i, fluentsFirstIndex, steps, nbVariables));
                 encodedProblem.add(goalStateClause);
                 System.out.println("goalStateClause : " + goalStateClause);
             }
         }
-
-        // TODO : Action disjunction: at least one action must be executed at each step.
 
 
         // write the CNF problem to a file
