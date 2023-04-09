@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd SokobanPDDLParser
+cd SokobanPDDLParser || exit
 
 echo -e "\n\e[1;32m Cleaning SokobanPDDLParser \e[0m\n"
 mvn -q clean
@@ -10,7 +10,7 @@ mvn package
 
 
 
-cd ../sokoban-master
+cd ../sokoban-master || exit
 echo -e "\n\e[1;32m Cleaning sokoban-master \e[0m\n"
 mvn -q clean
 
