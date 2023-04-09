@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Encoder {
 
@@ -37,6 +39,8 @@ public class Encoder {
         // get toutes les actions
         List<Action> actions = problem.getActions();
         List<Fluent> fluents = problem.getFluents();
+        Set<Integer> F = new HashSet<>();
+        Set<Integer> A = new HashSet<>();
 
         int nbActions = actions.size();
         int nbFluents = fluents.size();
@@ -58,11 +62,13 @@ public class Encoder {
         for (int j = 0; j < precondPos.size(); j++) {
             if (precondPos.get(j)) {
                 initialStateClause.add(j + 1);
+                F.add(j + 1);
             }
         }
         for (int j = 0; j < precondNeg.size(); j++) {
             if (precondNeg.get(j)) {
                 initialStateClause.add(-(j + 1));
+                F.add(-(j + 1));
             }
         }
 
@@ -116,6 +122,8 @@ public class Encoder {
                         ArrayList<Integer> actionClause = new ArrayList<>();
                         actionClause.add(-actionFormula.action);
                         actionClause.add(terms.get(k).get(l));
+                        A.add(-actionFormula.action);
+                        F.add(terms.get(k).get(l));
                         System.out.println("[-a, ±f] : " + actionClause);
                         encodedProblem.add(actionClause);
                     }
@@ -134,6 +142,9 @@ public class Encoder {
                     transitionClause.add(a);
                     transitionClause.add(-b);
                     transitionClause.add(c);
+                    F.add(a);
+                    F.add(-b);
+                    A.add(c);
                     System.out.println("[f,-f[i+1],a] : " + transitionClause);
                     encodedProblem.add(transitionClause);
                 }
@@ -153,6 +164,9 @@ public class Encoder {
                     transitionClause.add(-a);
                     transitionClause.add(b);
                     transitionClause.add(c);
+                    F.add(a);
+                    F.add(-b);
+                    A.add(c);
                     System.out.println("[-f,f[i+1],a] : " + transitionClause);
                     encodedProblem.add(transitionClause);
                 }
@@ -167,6 +181,8 @@ public class Encoder {
                 int nextAction = action + 1;
                 actionClause.add(-action);
                 actionClause.add(-nextAction);
+                A.add(-action);
+                A.add(-nextAction);
                 System.out.println("[¬A, ¬(A+1)] : " + actionClause);
                 encodedProblem.add(actionClause);
             }
@@ -181,6 +197,7 @@ public class Encoder {
             if (goalPos.get(i)) {
                 ArrayList<Integer> goalStateClause = new ArrayList<>();
                 goalStateClause.add(getIndex(i, fluentsFirstIndex, steps, nbVariables));
+                F.add(getIndex(i, fluentsFirstIndex, steps, nbVariables));
                 encodedProblem.add(goalStateClause);
                 System.out.println("goalStateClause : " + goalStateClause);
             }
@@ -189,6 +206,7 @@ public class Encoder {
             if (goalNeg.get(i)) {
                 ArrayList<Integer> goalStateClause = new ArrayList<>();
                 goalStateClause.add(-getIndex(i, fluentsFirstIndex, steps, nbVariables));
+                F.add(-getIndex(i, fluentsFirstIndex, steps, nbVariables));
                 encodedProblem.add(goalStateClause);
                 System.out.println("goalStateClause : " + goalStateClause);
             }
@@ -206,6 +224,40 @@ public class Encoder {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // intersection of A and F
+        System.out.println("Check intersection of the two sets :");
+
+        String posA = "";
+        String negA = "";
+        for (int element : A) {
+            if (element > 0) {
+                posA += element + " ";
+            } else {
+                negA += element + " ";
+            }
+        }
+
+        String posF = "";
+        String negF = "";
+        for (int element : F) {
+            if (element > 0) {
+                posF += element + " ";
+            } else {
+                negF += element + " ";
+            }
+        }
+        // print positive values of hashset.
+        System.out.println("posA : " + posA);
+        System.out.println("negA : " + negA);
+        System.out.println("posF : " + posF);
+        System.out.println("negF : " + negF);
+
+
+        Set<Integer> I = new HashSet<>(A);
+        I.retainAll(F); // I now contains the intersection of A and F
+        System.out.println("I : " + I); // prints intersection
+
         return encodedProblem;
     }
 
