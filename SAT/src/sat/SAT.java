@@ -1,16 +1,30 @@
 package sat;
 
-
 import fr.uga.pddl4j.heuristics.state.StateHeuristic;
 import fr.uga.pddl4j.parser.DefaultParsedProblem;
 import fr.uga.pddl4j.plan.Plan;
 import fr.uga.pddl4j.planners.AbstractPlanner;
 import fr.uga.pddl4j.problem.DefaultProblem;
 import fr.uga.pddl4j.problem.Problem;
+import fr.uga.pddl4j.plan.SequentialPlan;
+import fr.uga.pddl4j.problem.Fluent;
+import fr.uga.pddl4j.problem.operator.Action;
+
+import org.sat4j.core.VecInt;
+import org.sat4j.minisat.SolverFactory;
+import org.sat4j.specs.IProblem;
+import org.sat4j.specs.ISolver;
+import org.sat4j.specs.TimeoutException;
+import org.sat4j.specs.ContradictionException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import picocli.CommandLine;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -75,46 +89,57 @@ public class SAT extends AbstractPlanner {
         int steps = 3;
         ArrayList<ArrayList<Integer>> satProblem = satEncoder.encode(steps);  //récupérer le plan
 
-        //RESOLUTION DU PROBLEME SAT
+        final int MAXVAR = 10000;
+        final int NBCLAUSES = 5000;
+        
+        ISolver solver = SolverFactory.newDefault();
+        solver.setTimeout(3600); // 1 hour timeout
 
-        // final int MAXVAR = 1000;
-        // final int NBCLAUSES = 500;
-        // ISolver solver = SolverFactory.newDefault();
-        // solver.setTimeout(3600); // 1 hour timeout
+        try {
+            // formatter le problème pour SAT4J
+            for(ArrayList<Integer> clause : satProblem) {
+                int[] formattedClause = clause.stream().mapToInt(i -> i).toArray();
+                solver.addClause(new VecInt(formattedClause));
+            }
 
+            // tester si le problème est satisfiable et afficher le résultat
+            IProblem iProblem = solver;
+            if (iProblem.isSatisfiable()) {
 
-        // for(int i=0; i< satProblem.size(); i++){
-        //     int[] clause = new int[satProblem.get(i).size()];
-        //     for(int j=0; j<satProblem.get(i).size(); j++){
-        //         clause[j] = satProblem.get(i).get(j);
-        //     }
-        //     solver.addClause(new VecInt(clause));
-        // }
-        // foreach (ArrayList<Integer> clause : satProblem) {
-        //     int[] formattedClause = clause.stream().mapToInt(i -> i).toArray();
-        //     solver.addClause(new VecInt(formattedClause));
-        // }
+                System.out.println("\nSatisfiable !");
 
+                // récupérer le modèle calculé par SAT4J
+                int[] model = iProblem.findModel();
+               
+                // convertir le modèle en plan séquentiel
+                SequentialPlan plan = new SequentialPlan();
 
-        // OLD CODE : A* SEARCH
-        /*// Creates the A* search strategy
-        StateSpaceSearch search = StateSpaceSearch.getInstance(SearchStrategy.Name.ASTAR,
-                this.getHeuristic(), this.getHeuristicWeight(), this.getTimeout());
-        LOGGER.info("* Starting A* search \n");
-        // Search a solution
-        Plan plan = search.searchPlan(problem);
-        // If a plan is found update the statistics of the planner and log search information
-        if (plan != null) {
-            LOGGER.info("* A* search succeeded\n");
-            this.getStatistics().setTimeToSearch(search.getSearchingTime());
-            this.getStatistics().setMemoryUsedToSearch(search.getMemoryUsed());
-        } else {
-            LOGGER.info("* A* search failed\n");
+                List<Action> actions = problem.getActions();
+                int nbActions = actions.size();
+
+                // pour chaque littéral positif du modèle calculé par SAT4J, ajouter l'action correspondante au plan
+                for(int i = 0; i < model.length; i++) {
+                    if(model[i] > 0) {
+                        int actionIndex = 0; //TODO : calculer l'index de l'action
+                        Action action = actions.get(actionIndex);
+                        plan.add(0,action);
+                    }
+                }
+
+                return plan;
+                
+            } else {
+                System.out.println("Unsatisfiable !");
+            }
+        } catch (ContradictionException e) {
+            System.out.println("Unsatisfiable (trivial)!");
+        } catch (TimeoutException e) {
+            System.out.println("Timeout, sorry!");      
         }
-        // Return the plan found or null if the search fails.
-        return plan;*/
+        
         return null;
     }
+
     @Override
     public boolean isSupported(Problem problem) {
         return false;
