@@ -58,22 +58,25 @@ public class Encoder {
         BitVector precondPos = problem.getInitialState().getPositiveFluents();
         BitVector precondNeg = problem.getInitialState().getNegativeFluents();
 
-        ArrayList<Integer> initialStateClause = new ArrayList<>();
+        ArrayList<Integer> initialStateClause;
         for (int j = 0; j < precondPos.size(); j++) {
             if (precondPos.get(j)) {
-                initialStateClause.add(j + 1);
-                F.add(j + 1);
+                initialStateClause = new ArrayList<>();
+                initialStateClause.add(j + fluentsFirstIndex);
+                encodedProblem.add(initialStateClause);
+                F.add(j + fluentsFirstIndex);
             }
         }
         for (int j = 0; j < precondNeg.size(); j++) {
             if (precondNeg.get(j)) {
-                initialStateClause.add(-(j + 1));
-                F.add(-(j + 1));
+                initialStateClause = new ArrayList<>();
+                initialStateClause.add(-(j + fluentsFirstIndex));
+                F.add(-(j + fluentsFirstIndex));
+                encodedProblem.add(initialStateClause);
             }
         }
 
-        encodedProblem.add(initialStateClause);
-        System.out.println("initialStateClause : " + initialStateClause);
+        System.out.println("initialStateClause : " + encodedProblem);
 
         // Steps loop
         for (int step = 0; step < steps; step++) {
@@ -228,35 +231,37 @@ public class Encoder {
         // intersection of A and F
         System.out.println("Check intersection of the two sets :");
 
-        String posA = "";
-        String negA = "";
+        StringBuilder posA = new StringBuilder();
+        StringBuilder negA = new StringBuilder();
         for (int element : A) {
             if (element > 0) {
-                posA += element + " ";
+                posA.append(element).append(" ");
             } else {
-                negA += element + " ";
+                negA.append(element).append(" ");
             }
         }
 
-        String posF = "";
-        String negF = "";
+        StringBuilder posF = new StringBuilder();
+        StringBuilder negF = new StringBuilder();
         for (int element : F) {
             if (element > 0) {
-                posF += element + " ";
+                posF.append(element).append(" ");
             } else {
-                negF += element + " ";
+                negF.append(element).append(" ");
             }
         }
-        // print positive values of hashset.
-        System.out.println("posA : " + posA);
-        System.out.println("negA : " + negA);
-        System.out.println("posF : " + posF);
-        System.out.println("negF : " + negF);
-
 
         Set<Integer> I = new HashSet<>(A);
         I.retainAll(F); // I now contains the intersection of A and F
-        System.out.println("I : " + I); // prints intersection
+        if (I.size() > 0) {
+            // print positive values of hashset.
+            System.err.println("posA : " + posA);
+            System.err.println("negA : " + negA);
+            System.err.println("posF : " + posF);
+            System.err.println("negF : " + negF);
+            System.err.println("\nError in encoding Intersection of Actions and Fluents is not empty!"); // prints intersection
+            System.err.println("I : " + I); // prints intersection
+        }
 
         return encodedProblem;
     }
