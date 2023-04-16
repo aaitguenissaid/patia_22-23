@@ -3,29 +3,23 @@ package sat;
 import fr.uga.pddl4j.heuristics.state.StateHeuristic;
 import fr.uga.pddl4j.parser.DefaultParsedProblem;
 import fr.uga.pddl4j.plan.Plan;
+import fr.uga.pddl4j.plan.SequentialPlan;
 import fr.uga.pddl4j.planners.AbstractPlanner;
 import fr.uga.pddl4j.problem.DefaultProblem;
 import fr.uga.pddl4j.problem.Problem;
-import fr.uga.pddl4j.plan.SequentialPlan;
-import fr.uga.pddl4j.problem.Fluent;
 import fr.uga.pddl4j.problem.operator.Action;
-
-import org.sat4j.core.VecInt;
-import org.sat4j.minisat.SolverFactory;
-import org.sat4j.specs.IProblem;
-import org.sat4j.specs.ISolver;
-import org.sat4j.specs.TimeoutException;
-import org.sat4j.specs.ContradictionException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.sat4j.core.VecInt;
+import org.sat4j.minisat.SolverFactory;
+import org.sat4j.specs.ContradictionException;
+import org.sat4j.specs.ISolver;
+import org.sat4j.specs.TimeoutException;
 import picocli.CommandLine;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * The class is an example. It shows how to create a simple SAT search planner able to
@@ -34,16 +28,7 @@ import java.util.*;
  * @author D. Pellier
  * @version 4.0 - 30.11.2021
  */
-@CommandLine.Command(name = "SAT",
-    version = "SAT 1.0",
-    description = "Solves a specified planning problem using SAT search strategy.",
-    sortOptions = false,
-    mixinStandardHelpOptions = true,
-    headerHeading = "Usage:%n",
-    synopsisHeading = "%n",
-    descriptionHeading = "%nDescription:%n%n",
-    parameterListHeading = "%nParameters:%n",
-    optionListHeading = "%nOptions:%n")
+@CommandLine.Command(name = "SAT", version = "SAT 1.0", description = "Solves a specified planning problem using SAT search strategy.", sortOptions = false, mixinStandardHelpOptions = true, headerHeading = "Usage:%n", synopsisHeading = "%n", descriptionHeading = "%nDescription:%n%n", parameterListHeading = "%nParameters:%n", optionListHeading = "%nOptions:%n")
 public class SAT extends AbstractPlanner {
 
     /**
@@ -61,6 +46,7 @@ public class SAT extends AbstractPlanner {
      */
 
     private StateHeuristic.Name heuristic;
+
     /**
      * Instantiates the planning problem from a parsed problem.
      *
@@ -91,52 +77,61 @@ public class SAT extends AbstractPlanner {
 
         final int MAXVAR = 10000;
         final int NBCLAUSES = 5000;
-        
+
         ISolver solver = SolverFactory.newDefault();
         solver.setTimeout(3600); // 1 hour timeout
 
         try {
             // formatter le problème pour SAT4J
-            for(ArrayList<Integer> clause : satProblem) {
+            for (ArrayList<Integer> clause : satProblem) {
                 int[] formattedClause = clause.stream().mapToInt(i -> i).toArray();
                 solver.addClause(new VecInt(formattedClause));
             }
 
             // tester si le problème est satisfiable et afficher le résultat
-            IProblem iProblem = solver;
-            if (iProblem.isSatisfiable()) {
+            if (solver.isSatisfiable()) {
 
                 System.out.println("\nSatisfiable !");
 
                 // récupérer le modèle calculé par SAT4J
-                int[] model = iProblem.findModel();
-               
+                int[] model = solver.findModel();
+
                 // convertir le modèle en plan séquentiel
                 SequentialPlan plan = new SequentialPlan();
 
                 List<Action> actions = problem.getActions();
                 int nbActions = actions.size();
-
+                int nbFluents = problem.getFluents().size();
+                int nbVariables = nbFluents + nbActions;
+                System.out.println("nbFluents : " + nbFluents);
+                System.out.println("nbActions : " + nbActions);
+                System.out.println("nbVariables : " + nbVariables);
                 // pour chaque littéral positif du modèle calculé par SAT4J, ajouter l'action correspondante au plan
-                for(int i = 0; i < model.length; i++) {
-                    if(model[i] > 0) {
-                        int actionIndex = 0; //TODO : calculer l'index de l'action
-                        Action action = actions.get(actionIndex);
-                        plan.add(0,action);
+                System.out.println("model : " + Arrays.toString(model));
+
+                System.out.print("index : ");
+                for (int m : model) {
+                    if (m > 0) {
+                        //System.out.print(model[i] + " ");
+                        int actionIndex = m % nbVariables;
+                        System.out.print(actionIndex + " ");
+                        Action action = actions.get(actionIndex);//TODO : calculer l'index de l'action
+                        plan.add(0, action);
                     }
                 }
+                System.out.print("\n");
 
                 return plan;
-                
+
             } else {
                 System.out.println("Unsatisfiable !");
             }
         } catch (ContradictionException e) {
             System.out.println("Unsatisfiable (trivial)!");
         } catch (TimeoutException e) {
-            System.out.println("Timeout, sorry!");      
+            System.out.println("Timeout, sorry!");
         }
-        
+
         return null;
     }
 
@@ -151,8 +146,7 @@ public class SAT extends AbstractPlanner {
      * @param weight the weight of the heuristic. The weight must be greater than 0.
      * @throws IllegalArgumentException if the weight is strictly less than 0.
      */
-    @CommandLine.Option(names = {"-w", "--weight"}, defaultValue = "1.0",
-            paramLabel = "<weight>", description = "Set the weight of the heuristic (preset 1.0).")
+    @CommandLine.Option(names = {"-w", "--weight"}, defaultValue = "1.0", paramLabel = "<weight>", description = "Set the weight of the heuristic (preset 1.0).")
     public void setHeuristicWeight(final double weight) {
         if (weight <= 0) {
             throw new IllegalArgumentException("Weight <= 0");
@@ -165,9 +159,7 @@ public class SAT extends AbstractPlanner {
      *
      * @param heuristic the name of the heuristic.
      */
-    @CommandLine.Option(names = {"-e", "--heuristic"}, defaultValue = "FAST_FORWARD",
-            description = "Set the heuristic : AJUSTED_SUM, AJUSTED_SUM2, AJUSTED_SUM2M, COMBO, "
-                    + "MAX, FAST_FORWARD SET_LEVEL, SUM, SUM_MUTEX (preset: FAST_FORWARD)")
+    @CommandLine.Option(names = {"-e", "--heuristic"}, defaultValue = "FAST_FORWARD", description = "Set the heuristic : AJUSTED_SUM, AJUSTED_SUM2, AJUSTED_SUM2M, COMBO, " + "MAX, FAST_FORWARD SET_LEVEL, SUM, SUM_MUTEX (preset: FAST_FORWARD)")
     public void setHeuristic(StateHeuristic.Name heuristic) {
         this.heuristic = heuristic;
     }

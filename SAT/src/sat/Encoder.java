@@ -139,14 +139,14 @@ public class Encoder {
                 for (int k = 0; k < actionFormula.effectPosAction.size(); k++) {
                     ArrayList<Integer> transitionClause = new ArrayList<>();
                     int a = getPreviousIndex(actionFormula.effectPosAction.get(k), nbVariables);
-                    int b = actionFormula.effectPosAction.get(k);
+                    int b = -actionFormula.effectPosAction.get(k);
                     int c = actionFormula.action;
                     //System.out.println(" ¬A ∧ B -> C  : " + -a + " ∧ " + b + " -> " + c);
                     transitionClause.add(a);
-                    transitionClause.add(-b);
+                    transitionClause.add(b);
                     transitionClause.add(c);
                     F.add(a);
-                    F.add(-b);
+                    F.add(b);
                     A.add(c);
                     System.out.println("[f,-f[i+1],a] : " + transitionClause);
                     encodedProblem.add(transitionClause);
@@ -159,16 +159,16 @@ public class Encoder {
                 // ¬A ∨ B ∨ C
                 for (int k = 0; k < actionFormula.effectNegAction.size(); k++) {
                     ArrayList<Integer> transitionClause = new ArrayList<>();
-                    int a = (-actionFormula.effectNegAction.get(k)) - nbVariables;
-                    int b = (-actionFormula.effectNegAction.get(k));
+                    int a = -getPreviousIndex(-actionFormula.effectNegAction.get(k), nbVariables);
+                    int b = -actionFormula.effectNegAction.get(k);
                     int c = actionFormula.action;
 
                     //System.out.println(" A ∧ ¬B -> C  : " + a + " ∧ " + -b + " -> " + c);
-                    transitionClause.add(-a);
+                    transitionClause.add(a);
                     transitionClause.add(b);
                     transitionClause.add(c);
                     F.add(a);
-                    F.add(-b);
+                    F.add(b);
                     A.add(c);
                     System.out.println("[-f,f[i+1],a] : " + transitionClause);
                     encodedProblem.add(transitionClause);
@@ -180,12 +180,12 @@ public class Encoder {
             // ¬Ai v ¬Bi
             for (int i = 0; i < actions.size() - 1; i++) {
                 ArrayList<Integer> actionClause = new ArrayList<>();
-                int action = getIndex(i, actionsFirstIndex, step, nbVariables);
-                int nextAction = action + 1;
-                actionClause.add(-action);
-                actionClause.add(-nextAction);
-                A.add(-action);
-                A.add(-nextAction);
+                int action = -getIndex(i, actionsFirstIndex, step, nbVariables);
+                int nextAction = action - 1;
+                actionClause.add(action);
+                actionClause.add(nextAction);
+                A.add(action);
+                A.add(nextAction);
                 System.out.println("[¬A, ¬(A+1)] : " + actionClause);
                 encodedProblem.add(actionClause);
             }
@@ -199,8 +199,9 @@ public class Encoder {
         for (int i = 0; i < goalPos.size(); i++) {
             if (goalPos.get(i)) {
                 ArrayList<Integer> goalStateClause = new ArrayList<>();
-                goalStateClause.add(getIndex(i, fluentsFirstIndex, steps, nbVariables));
-                F.add(getIndex(i, fluentsFirstIndex, steps, nbVariables));
+                int goalIndex = getIndex(i, fluentsFirstIndex, steps, nbVariables);
+                goalStateClause.add(goalIndex);
+                F.add(goalIndex);
                 encodedProblem.add(goalStateClause);
                 System.out.println("goalStateClause : " + goalStateClause);
             }
@@ -208,8 +209,9 @@ public class Encoder {
         for (int i = 0; i < goalNeg.size(); i++) {
             if (goalNeg.get(i)) {
                 ArrayList<Integer> goalStateClause = new ArrayList<>();
-                goalStateClause.add(-getIndex(i, fluentsFirstIndex, steps, nbVariables));
-                F.add(-getIndex(i, fluentsFirstIndex, steps, nbVariables));
+                int goalIndex = -getIndex(i, fluentsFirstIndex, steps, nbVariables);
+                goalStateClause.add(goalIndex);
+                F.add(goalIndex);
                 encodedProblem.add(goalStateClause);
                 System.out.println("goalStateClause : " + goalStateClause);
             }
@@ -231,6 +233,7 @@ public class Encoder {
         // intersection of A and F
         System.out.println("Check intersection of the two sets :");
 
+        // just for printing the sets.
         StringBuilder posA = new StringBuilder();
         StringBuilder negA = new StringBuilder();
         for (int element : A) {
@@ -255,10 +258,19 @@ public class Encoder {
         I.retainAll(F); // I now contains the intersection of A and F
         if (I.size() > 0) {
             // print positive values of hashset.
-            System.err.println("posA : " + posA);
-            System.err.println("negA : " + negA);
+            System.err.println("nbActions = " + nbActions);
+            System.err.println("nbFluents = " + nbFluents);
+            System.err.println("nbVariables = " + nbVariables);
+
+            System.err.println("\nfluentsFirstIndex = " + fluentsFirstIndex);
+            System.err.println("actionsFirstIndex = " + actionsFirstIndex);
+
+            System.err.println("\nposA : " + posA);
             System.err.println("posF : " + posF);
+
+            System.err.println("\nnegA : " + negA);
             System.err.println("negF : " + negF);
+
             System.err.println("\nError in encoding Intersection of Actions and Fluents is not empty!"); // prints intersection
             System.err.println("I : " + I); // prints intersection
         }
