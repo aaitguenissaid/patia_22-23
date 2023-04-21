@@ -7,6 +7,7 @@ import fr.uga.pddl4j.plan.SequentialPlan;
 import fr.uga.pddl4j.planners.AbstractPlanner;
 import fr.uga.pddl4j.problem.DefaultProblem;
 import fr.uga.pddl4j.problem.Problem;
+import fr.uga.pddl4j.problem.State;
 import fr.uga.pddl4j.problem.operator.Action;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,12 +69,16 @@ public class SAT extends AbstractPlanner {
      */
     @Override
     public Plan solve(final Problem problem) {
+        // First we create an instance of the heuristic to use to guide the search
+        setHeuristic(StateHeuristic.Name.FAST_FORWARD);
+        final StateHeuristic heuristic = StateHeuristic.getInstance(this.getHeuristic(), problem);
+        final State init = new State(problem.getInitialState());
+        int estimatedSteps = heuristic.estimate(init, problem.getGoal());
 
         //ENCODER LE PROBLEME AVANT DE LE RESOUDRE
         Encoder satEncoder = new Encoder(problem);      //créer l'encodeur
         // TODO : get the value of steps from command line
-        int steps = 3;
-        ArrayList<ArrayList<Integer>> satProblem = satEncoder.encode(steps);  //récupérer le plan
+        ArrayList<ArrayList<Integer>> satProblem = satEncoder.encode(estimatedSteps);  //récupérer le plan
 
         final int MAXVAR = 10000;
         final int NBCLAUSES = 5000;
@@ -106,23 +111,30 @@ public class SAT extends AbstractPlanner {
                 System.out.println("nbFluents : " + nbFluents);
                 System.out.println("nbActions : " + nbActions);
                 System.out.println("nbVariables : " + nbVariables);
+
+                System.out.println("actions : " + actions);
                 // pour chaque littéral positif du modèle calculé par SAT4J, ajouter l'action correspondante au plan
                 System.out.println("model : " + Arrays.toString(model));
 
-                System.out.print("index : ");
+                StringBuilder modelPos = new StringBuilder();
+                StringBuilder actionsPos = new StringBuilder();
                 for (int m : model) {
+                    m = m-1;
                     if (m > 0) {
-                        //System.out.print(model[i] + " ");
+                        modelPos.append(m).append(" ");
                         int actionIndex = m % nbVariables;
-                        System.out.print(actionIndex + " ");
-                        Action action = actions.get(actionIndex);//TODO : calculer l'index de l'action
-                        plan.add(0, action);
+                        if (actionIndex >= nbFluents) {
+                            actionsPos.append(actionIndex).append(" ");
+                            Action action = actions.get(actionIndex); //TODO : calculer l'index de l'action
+                            plan.add(0, action);
+                        }
                     }
                 }
+                System.out.println("\nestimatedSteps : " + estimatedSteps);
+                System.out.println("ModelPos : " + modelPos);
+                System.out.println("actionsPos : " + actionsPos);
                 System.out.print("\n");
-
                 return plan;
-
             } else {
                 System.out.println("Unsatisfiable !");
             }

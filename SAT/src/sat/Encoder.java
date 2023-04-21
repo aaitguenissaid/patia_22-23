@@ -26,25 +26,86 @@ public class Encoder {
     }
 
     private int getPreviousIndex(int index, int nbVariables) {
-        if (index < 0) index = -index;
-        if (index <= nbVariables)
+        int result;
+        boolean isNegative = false;
+        if (index < 0)  {
+            isNegative = true;
+            index = -index;
+        }
+
+        if (index <= nbVariables) {
             System.err.println("Error: index=" + index + " is smaller than nbVariables=" + nbVariables + " -> does not have a previous index");
-        return index - nbVariables;
+        }
+
+        result = index - nbVariables;
+
+        if (isNegative) {
+            result = -result;
+        }
+        return result;
     }
+
+    // [-a, ±f]
+    private void addActionClause(int actionIndex, int fluentIndex) {
+        ArrayList<Integer> actionClause = new ArrayList<>();
+        actionClause.add(-actionIndex);
+        actionClause.add(fluentIndex);
+        A.add(-actionIndex);
+        F.add(fluentIndex);
+        System.out.println("[-a, ±f] : " + actionClause);
+        encodedProblem.add(actionClause);
+    }
+
+    private void addTransitonClause(int actionIndex, int fluentIndex, boolean positiveFluent) {
+        ArrayList<Integer> transitionClause = new ArrayList<>();
+        int a = getPreviousIndex(fluentIndex, nbVariables);
+        int b = fluentIndex;
+        int c = actionIndex;
+
+        if(positiveFluent) {
+            b = -b;     // ¬A ∧ B -> C  <==>  A ∨ ¬B ∨ C
+        } else {
+          a=-a;         // A ∧ ¬B -> C  <==>  ¬A ∨ B ∨ C
+        }
+        //System.out.println(" ¬A ∧ B -> C  : " + -a + " ∧ " + b + " -> " + c);
+        transitionClause.add(a);
+        transitionClause.add(b);
+        transitionClause.add(c);
+        F.add(a);
+        F.add(b);
+        A.add(c);
+        System.out.println("[f,-f[i+1],a] : " + transitionClause);
+        encodedProblem.add(transitionClause);
+    }
+
+    private void addDisjunctionClause(int action1, int action2){
+        ArrayList<Integer> disjunctionClause = new ArrayList<>();
+        disjunctionClause.add(action1);
+        disjunctionClause.add(action2);
+        A.add(action1);
+        A.add(action2);
+        System.out.println("[¬A, ¬B] : " + disjunctionClause);
+        encodedProblem.add(disjunctionClause);
+    }
+
+
+    ArrayList<ArrayList<Integer>> encodedProblem = new ArrayList<>();
+    Set<Integer> F = new HashSet<>();
+    Set<Integer> A = new HashSet<>();
+    int nbActions;
+    int nbFluents;
+    int nbVariables;
 
     public ArrayList<ArrayList<Integer>> encode(int steps) {
 
-        ArrayList<ArrayList<Integer>> encodedProblem = new ArrayList<>();
 
         // get toutes les actions
         List<Action> actions = problem.getActions();
         List<Fluent> fluents = problem.getFluents();
-        Set<Integer> F = new HashSet<>();
-        Set<Integer> A = new HashSet<>();
 
-        int nbActions = actions.size();
-        int nbFluents = fluents.size();
-        int nbVariables = nbFluents + nbActions;
+        nbActions = actions.size();
+        nbFluents = fluents.size();
+        nbVariables = nbFluents + nbActions;
         System.out.println("nbActions = " + nbActions);
         System.out.println("nbFluents = " + nbFluents);
         System.out.println("nbVariables = " + nbVariables);
@@ -96,98 +157,42 @@ public class Encoder {
                 // ajouter les fluents positifs de la précondition
                 for (int k = 0; k < precondPosAction.size(); k++) {
                     if (precondPosAction.get(k)) {
-                        actionFormula.precondPosAction.add(getIndex(k, fluentsFirstIndex, step, nbVariables));
+                        int precondition = getIndex(k, fluentsFirstIndex, step, nbVariables);
+                        actionFormula.precondPosAction.add(precondition);
+                        addActionClause(actionFormula.action, precondition);
                     }
                 }
 
                 // ajouter les fluents positifs de l'effet sur le prochain état
                 for (int k = 0; k < effectPosAction.size(); k++) {
                     if (effectPosAction.get(k)) {
-                        actionFormula.effectPosAction.add(getIndex(k, fluentsFirstIndex, step + 1, nbVariables));
+                        int posFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
+                        actionFormula.effectPosAction.add(posFluent);
+                        addActionClause(actionFormula.action, posFluent);
+                        addTransitonClause(actionFormula.action, posFluent, true);
                     }
                 }
+
                 // ajouter les fluents négatifs de l'effet sur le prochain état
                 for (int k = 0; k < effectNegAction.size(); k++) {
-                    if (effectNegAction.get(j)) {
-                        actionFormula.effectNegAction.add(-getIndex(k, fluentsFirstIndex, step + 1, nbVariables));
+                    if (effectNegAction.get(k)) {
+                        int negFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
+                        actionFormula.effectNegAction.add(negFluent);
+                        addActionClause(actionFormula.action, -negFluent);
+                        addTransitonClause(actionFormula.action, negFluent, false);
                     }
                 }
 
-                ArrayList<ArrayList<Integer>> terms = new ArrayList<>();
-                terms.add(actionFormula.precondPosAction);
-                terms.add(actionFormula.effectPosAction);
-                terms.add(actionFormula.effectNegAction);
-
-                System.out.println("\nActions " + step + " : ");
-                for (int k = 0; k < 3; k++) {
-                    for (int l = 0; l < terms.get(k).size(); l++) {
-                        //Clauses correspondant  à l'action
-                        ArrayList<Integer> actionClause = new ArrayList<>();
-                        actionClause.add(-actionFormula.action);
-                        actionClause.add(terms.get(k).get(l));
-                        A.add(-actionFormula.action);
-                        F.add(terms.get(k).get(l));
-                        System.out.println("[-a, ±f] : " + actionClause);
-                        encodedProblem.add(actionClause);
+                System.out.println("\nActions disjunctions : ");
+                // Action disjunction: at least one action must be executed at each step.
+                // ¬Ai v ¬Bi
+                for (int k = 0; k < actions.size(); k++) {
+                    if (j != k) {
+                        int action1 = -getIndex(j, actionsFirstIndex, step, nbVariables);
+                        int action2 = -getIndex(k, actionsFirstIndex, step, nbVariables);
+                        addDisjunctionClause(action1, action2);
                     }
                 }
-
-                System.out.println("\nPositive Transitions " + step + " : ");
-                // ¬ fluent[i-1] ∧ fluent[i] -> action[i-1]
-                // ¬A ∧ B -> C
-                // A ∨ ¬B ∨ C
-                for (int k = 0; k < actionFormula.effectPosAction.size(); k++) {
-                    ArrayList<Integer> transitionClause = new ArrayList<>();
-                    int a = getPreviousIndex(actionFormula.effectPosAction.get(k), nbVariables);
-                    int b = -actionFormula.effectPosAction.get(k);
-                    int c = actionFormula.action;
-                    //System.out.println(" ¬A ∧ B -> C  : " + -a + " ∧ " + b + " -> " + c);
-                    transitionClause.add(a);
-                    transitionClause.add(b);
-                    transitionClause.add(c);
-                    F.add(a);
-                    F.add(b);
-                    A.add(c);
-                    System.out.println("[f,-f[i+1],a] : " + transitionClause);
-                    encodedProblem.add(transitionClause);
-                }
-
-
-                System.out.println("\nNegative Transitions " + step + " : ");
-                // fluent[i-1] ∧ ¬fluent[i] -> action[i-1]
-                // A ∧ ¬B -> C
-                // ¬A ∨ B ∨ C
-                for (int k = 0; k < actionFormula.effectNegAction.size(); k++) {
-                    ArrayList<Integer> transitionClause = new ArrayList<>();
-                    int a = -getPreviousIndex(-actionFormula.effectNegAction.get(k), nbVariables);
-                    int b = -actionFormula.effectNegAction.get(k);
-                    int c = actionFormula.action;
-
-                    //System.out.println(" A ∧ ¬B -> C  : " + a + " ∧ " + -b + " -> " + c);
-                    transitionClause.add(a);
-                    transitionClause.add(b);
-                    transitionClause.add(c);
-                    F.add(a);
-                    F.add(b);
-                    A.add(c);
-                    System.out.println("[-f,f[i+1],a] : " + transitionClause);
-                    encodedProblem.add(transitionClause);
-                }
-            }
-
-            System.out.println("\nActions disjunctions " + step + " : ");
-            // Action disjunction: at least one action must be executed at each step.
-            // ¬Ai v ¬Bi
-            for (int i = 0; i < actions.size() - 1; i++) {
-                ArrayList<Integer> actionClause = new ArrayList<>();
-                int action = -getIndex(i, actionsFirstIndex, step, nbVariables);
-                int nextAction = action - 1;
-                actionClause.add(action);
-                actionClause.add(nextAction);
-                A.add(action);
-                A.add(nextAction);
-                System.out.println("[¬A, ¬(A+1)] : " + actionClause);
-                encodedProblem.add(actionClause);
             }
         }
 
