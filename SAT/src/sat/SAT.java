@@ -78,72 +78,74 @@ public class SAT extends AbstractPlanner {
         //ENCODER LE PROBLEME AVANT DE LE RESOUDRE
         Encoder satEncoder = new Encoder(problem);      //créer l'encodeur
         // TODO : get the value of steps from command line
-        ArrayList<ArrayList<Integer>> satProblem = satEncoder.encode(estimatedSteps);  //récupérer le plan
+        int MAX_LOOP = 128;
+        satEncoder.encode(estimatedSteps-1);
 
-        final int MAXVAR = 10000;
-        final int NBCLAUSES = 5000;
+        for(int steps=estimatedSteps; steps < estimatedSteps+MAX_LOOP; steps++) {
+            satEncoder.encodeStepWithGoal(steps);
+            ArrayList<ArrayList<Integer>> encodedProblem = satEncoder.getEncodedProblem();  //récupérer le plan
+            ISolver solver = SolverFactory.newDefault();
+            solver.setTimeout(600);
 
-        ISolver solver = SolverFactory.newDefault();
-        solver.setTimeout(3600); // 1 hour timeout
+            try {
+                // formatter le problème pour SAT4J
+                for (ArrayList<Integer> clause : encodedProblem) {
+                    int[] formattedClause = clause.stream().mapToInt(i -> i).toArray();
+                    solver.addClause(new VecInt(formattedClause));
+                }
 
-        try {
-            // formatter le problème pour SAT4J
-            for (ArrayList<Integer> clause : satProblem) {
-                int[] formattedClause = clause.stream().mapToInt(i -> i).toArray();
-                solver.addClause(new VecInt(formattedClause));
-            }
+                // tester si le problème est satisfiable et afficher le résultat
+                if (solver.isSatisfiable()) {
 
-            // tester si le problème est satisfiable et afficher le résultat
-            if (solver.isSatisfiable()) {
+                    System.out.println("\nSatisfiable !");
 
-                System.out.println("\nSatisfiable !");
+                    // récupérer le modèle calculé par SAT4J
+                    int[] model = solver.findModel();
 
-                // récupérer le modèle calculé par SAT4J
-                int[] model = solver.findModel();
+                    // convertir le modèle en plan séquentiel
+                    SequentialPlan plan = new SequentialPlan();
 
-                // convertir le modèle en plan séquentiel
-                SequentialPlan plan = new SequentialPlan();
+                    List<Action> actions = problem.getActions();
+                    int nbActions = actions.size();
+                    int nbFluents = problem.getFluents().size();
+                    int nbVariables = nbFluents + nbActions;
+                    System.out.println("nbFluents : " + nbFluents);
+                    System.out.println("nbActions : " + nbActions);
+                    System.out.println("nbVariables : " + nbVariables);
 
-                List<Action> actions = problem.getActions();
-                int nbActions = actions.size();
-                int nbFluents = problem.getFluents().size();
-                int nbVariables = nbFluents + nbActions;
-                System.out.println("nbFluents : " + nbFluents);
-                System.out.println("nbActions : " + nbActions);
-                System.out.println("nbVariables : " + nbVariables);
+                    System.out.println("actions : " + actions);
+                    // pour chaque littéral positif du modèle calculé par SAT4J, ajouter l'action correspondante au plan
+                    System.out.println("model : " + Arrays.toString(model));
 
-                System.out.println("actions : " + actions);
-                // pour chaque littéral positif du modèle calculé par SAT4J, ajouter l'action correspondante au plan
-                System.out.println("model : " + Arrays.toString(model));
-
-                StringBuilder modelPos = new StringBuilder();
-                StringBuilder actionsPos = new StringBuilder();
-                for (int m : model) {
-                    m = m-1;
-                    if (m > 0) {
-                        modelPos.append(m).append(" ");
-                        int actionIndex = m % nbVariables;
-                        if (actionIndex >= nbFluents) {
-                            actionsPos.append(actionIndex).append(" ");
-                            Action action = actions.get(actionIndex); //TODO : calculer l'index de l'action
-                            plan.add(0, action);
+                    StringBuilder modelPos = new StringBuilder();
+                    StringBuilder actionsPos = new StringBuilder();
+                    for (int m : model) {
+                        m = m-1;
+                        if (m > 0) {
+                            modelPos.append(m).append(" ");
+                            int actionIndex = m % nbVariables;
+                            if (actionIndex >= nbFluents) {
+                                actionsPos.append(actionIndex).append(" ");
+                                Action action = actions.get(actionIndex); //TODO : calculer l'index de l'action
+                                plan.add(0, action);
+                            }
                         }
                     }
+                    System.out.println("\nestimatedSteps : " + estimatedSteps);
+                    System.out.println("ModelPos : " + modelPos);
+                    System.out.println("actionsPos : " + actionsPos);
+                    System.out.print("\n");
+                    if(!plan.isEmpty())
+                        return plan;
+                } else {
+                    System.out.println("Unsatisfiable !");
                 }
-                System.out.println("\nestimatedSteps : " + estimatedSteps);
-                System.out.println("ModelPos : " + modelPos);
-                System.out.println("actionsPos : " + actionsPos);
-                System.out.print("\n");
-                return plan;
-            } else {
-                System.out.println("Unsatisfiable !");
+            } catch (ContradictionException e) {
+                System.out.println("Unsatisfiable (trivial)!");
+            } catch (TimeoutException e) {
+                System.out.println("Timeout, sorry!");
             }
-        } catch (ContradictionException e) {
-            System.out.println("Unsatisfiable (trivial)!");
-        } catch (TimeoutException e) {
-            System.out.println("Timeout, sorry!");
         }
-
         return null;
     }
 
