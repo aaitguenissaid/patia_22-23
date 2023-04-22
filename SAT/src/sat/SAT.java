@@ -90,7 +90,6 @@ public class SAT extends AbstractPlanner {
                 // formatter le problème pour SAT4J
                 for (ArrayList<Integer> clause : encodedProblem) {
                     int[] formattedClause = clause.stream().mapToInt(i -> i).toArray();
-                    System.err.println("formattedClause : " + Arrays.toString(formattedClause));
                     solver.addClause(new VecInt(formattedClause));
                 }
 
@@ -128,19 +127,17 @@ public class SAT extends AbstractPlanner {
                     I.retainAll(modelSet); // I now contains the intersection of A and F
 
                     System.out.println("intersection : " + I);
-                    /*
+
                     for (int m : model) {
                         //m = m-1;
                         if (m > 0) {
-                            modelPos.append(m).append(" ");
                             int actionIndex = m % nbVariables;
                             if (actionIndex >= nbFluents) {
-                                actionsPos.append(actionIndex).append(" ");
                                 Action action = actions.get(actionIndex); //TODO : calculer l'index de l'action
                                 plan.add(0, action);
                             }
                         }
-                    }*/
+                    }
                     System.out.println("\nSteps : " + steps);
                     System.out.println("ModelPos : " + modelPos);
                     System.out.println("actionsPos : " + actionsPos);

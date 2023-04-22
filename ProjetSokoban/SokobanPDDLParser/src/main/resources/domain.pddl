@@ -18,11 +18,6 @@
         position guard box case 
     )
 
-    ;;;(:constants
-    ;;;    free - position
-    ;;;    box - position
-    ;;;)
-
     (:predicates
         (guardOn ?x - position ?y - guard)
         (boxOn ?x - position)
