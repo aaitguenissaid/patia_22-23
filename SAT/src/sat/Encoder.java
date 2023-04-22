@@ -5,9 +5,6 @@ import fr.uga.pddl4j.problem.Problem;
 import fr.uga.pddl4j.problem.operator.Action;
 import fr.uga.pddl4j.util.BitVector;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +13,15 @@ import java.util.Set;
 public class Encoder {
 
     private final Problem problem;
+    ArrayList<ArrayList<Integer>> encodedProblem = new ArrayList<>();
+    ArrayList<ArrayList<Integer>> encodedProblemWithoutGoal = new ArrayList<>();
+    Set<Integer> F = new HashSet<>();
+    Set<Integer> A = new HashSet<>();
+    int nbActions;
+    int nbFluents;
+    int nbVariables;
+    int fluentsFirstIndex;
+    int actionsFirstIndex;
 
     public Encoder(Problem problem) {
         this.problem = problem;
@@ -117,16 +123,6 @@ public class Encoder {
 
     }
 
-    ArrayList<ArrayList<Integer>> encodedProblem = new ArrayList<>();
-    ArrayList<ArrayList<Integer>> encodedProblemWithoutGoal = new ArrayList<>();
-    Set<Integer> F = new HashSet<>();
-    Set<Integer> A = new HashSet<>();
-    int nbActions;
-    int nbFluents;
-    int nbVariables;
-    int fluentsFirstIndex;
-    int actionsFirstIndex;
-
     public void encode(int steps) {
         // get toutes les actions
         List<Action> actions = problem.getActions();
@@ -175,11 +171,7 @@ public class Encoder {
         }
 
         encodedProblem = encodedProblemWithoutGoal;
-
-        System.out.println("\nGoal : ");
         encodeGoal(steps);
-
-
     }
 
     private void checkIntersection() {
@@ -229,6 +221,7 @@ public class Encoder {
         }
 
     }
+
     private void encodeStep(int step) {
         List<Action> actions = problem.getActions();
 
@@ -289,7 +282,6 @@ public class Encoder {
     public void encodeStepWithGoal(int step) {
         encodeStep(step);
         encodedProblem = encodedProblemWithoutGoal;
-        System.out.println("\nGoal : ");
         encodeGoal(step + 1);
         checkIntersection();
     }
