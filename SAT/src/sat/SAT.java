@@ -18,9 +18,7 @@ import org.sat4j.specs.ISolver;
 import org.sat4j.specs.TimeoutException;
 import picocli.CommandLine;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * The class is an example. It shows how to create a simple SAT search planner able to
@@ -74,15 +72,16 @@ public class SAT extends AbstractPlanner {
         final StateHeuristic heuristic = StateHeuristic.getInstance(this.getHeuristic(), problem);
         final State init = new State(problem.getInitialState());
         int estimatedSteps = heuristic.estimate(init, problem.getGoal());
+        System.out.println("estimatedSteps = " + estimatedSteps);
 
         //ENCODER LE PROBLEME AVANT DE LE RESOUDRE
         Encoder satEncoder = new Encoder(problem);      //créer l'encodeur
         // TODO : get the value of steps from command line
-        int MAX_LOOP = 128;
-        satEncoder.encode(estimatedSteps-1);
+        int MAX_LOOP = 1;
+        satEncoder.encodeInitAndStepsAndGoal(estimatedSteps);
 
-        for(int steps=estimatedSteps; steps < estimatedSteps+MAX_LOOP; steps++) {
-            satEncoder.encodeStepWithGoal(steps);
+        for (int steps = estimatedSteps; steps < estimatedSteps + MAX_LOOP; steps++) {
+            //satEncoder.encodeStepWithGoal(steps);
             ArrayList<ArrayList<Integer>> encodedProblem = satEncoder.getEncodedProblem();  //récupérer le plan
             ISolver solver = SolverFactory.newDefault();
             solver.setTimeout(600);
@@ -91,6 +90,7 @@ public class SAT extends AbstractPlanner {
                 // formatter le problème pour SAT4J
                 for (ArrayList<Integer> clause : encodedProblem) {
                     int[] formattedClause = clause.stream().mapToInt(i -> i).toArray();
+                    System.err.println("formattedClause : " + Arrays.toString(formattedClause));
                     solver.addClause(new VecInt(formattedClause));
                 }
 
@@ -113,14 +113,24 @@ public class SAT extends AbstractPlanner {
                     System.out.println("nbActions : " + nbActions);
                     System.out.println("nbVariables : " + nbVariables);
 
-                    System.out.println("actions : " + actions);
                     // pour chaque littéral positif du modèle calculé par SAT4J, ajouter l'action correspondante au plan
                     System.out.println("model : " + Arrays.toString(model));
 
-                    StringBuilder modelPos = new StringBuilder();
-                    StringBuilder actionsPos = new StringBuilder();
+                    String modelPos = "";
+                    String actionsPos = "";
+
+                    Set<Integer> A = satEncoder.getSetA();
+                    Set<Integer> modelSet = new HashSet<>();
                     for (int m : model) {
-                        m = m-1;
+                        if (m > 0) modelSet.add(m);
+                    }
+                    Set<Integer> I = new HashSet<>(A);
+                    I.retainAll(modelSet); // I now contains the intersection of A and F
+
+                    System.out.println("intersection : " + I);
+                    /*
+                    for (int m : model) {
+                        //m = m-1;
                         if (m > 0) {
                             modelPos.append(m).append(" ");
                             int actionIndex = m % nbVariables;
@@ -130,13 +140,12 @@ public class SAT extends AbstractPlanner {
                                 plan.add(0, action);
                             }
                         }
-                    }
-                    System.out.println("\nestimatedSteps : " + estimatedSteps);
+                    }*/
+                    System.out.println("\nSteps : " + steps);
                     System.out.println("ModelPos : " + modelPos);
                     System.out.println("actionsPos : " + actionsPos);
                     System.out.print("\n");
-                    if(!plan.isEmpty())
-                        return plan;
+                    if (!plan.isEmpty()) return plan;
                 } else {
                     System.out.println("Unsatisfiable !");
                 }

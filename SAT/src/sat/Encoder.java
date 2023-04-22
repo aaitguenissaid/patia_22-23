@@ -5,6 +5,9 @@ import fr.uga.pddl4j.problem.Problem;
 import fr.uga.pddl4j.problem.operator.Action;
 import fr.uga.pddl4j.util.BitVector;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -80,7 +83,12 @@ public class Encoder {
         F.add(a);
         F.add(b);
         A.add(c);
-        System.out.println("[f,-f[i+1],a] : " + transitionClause);
+        if (positiveFluent) {
+            System.out.println("[f,-f[i+1],a] : " + transitionClause);
+        } else {
+            System.out.println("[-f,f[i+1],a] : " + transitionClause);
+
+        }
         encodedProblemWithoutGoal.add(transitionClause);
     }
 
@@ -123,7 +131,7 @@ public class Encoder {
 
     }
 
-    public void encode(int steps) {
+    private void encodeInit() {
         // get toutes les actions
         List<Action> actions = problem.getActions();
         List<Fluent> fluents = problem.getFluents();
@@ -143,6 +151,10 @@ public class Encoder {
         // Clause correspondant à l'état initial
         BitVector precondPos = problem.getInitialState().getPositiveFluents();
         BitVector precondNeg = problem.getInitialState().getNegativeFluents();
+        System.out.println("precondPos size = " + precondPos.size());
+        System.out.println("precondPos = " + precondPos);
+        System.out.println("precondNeg size = " + precondNeg.size());
+        System.out.println("precondNeg = " + precondNeg);
 
         ArrayList<Integer> initialStateClause;
         for (int j = 0; j < precondPos.size(); j++) {
@@ -164,19 +176,41 @@ public class Encoder {
 
         System.out.println("initialStateClause : " + encodedProblemWithoutGoal);
 
+    }
+
+    public void encodeInitAndSteps(int steps) {
+        encodeInit();
         // Steps loop
         for (int step = 0; step < steps; step++) {
-            // boucle sur les actions
             encodeStep(step);
         }
-
         encodedProblem = encodedProblemWithoutGoal;
+        checkIntersection();
+    }
+
+    public void encodeInitAndStepsAndGoal(int steps) {
+        // Steps loop
+        encodeInitAndSteps(steps);
         encodeGoal(steps);
+        checkIntersection();
+    }
+
+    public void writeToFile() {
+        // write the CNF problem to a file
+        PrintWriter writer;
+        try {
+            writer = new PrintWriter("results/encodedProblem.txt", StandardCharsets.UTF_8);
+            for (ArrayList<Integer> clause : encodedProblem) {
+                writer.println(clause.toString());
+            }
+            writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void checkIntersection() {
         // intersection of A and F
-        System.out.println("Check intersection of the two sets :");
 
         // just for printing the sets.
         StringBuilder posA = new StringBuilder();
@@ -198,6 +232,18 @@ public class Encoder {
                 negF.append(element).append(" ");
             }
         }
+
+
+        System.out.println("\nposA : " + posA);
+        System.out.println("posF : " + posF);
+
+        System.out.println("\nnegA : " + negA);
+        System.out.println("negF : " + negF);
+
+
+        System.out.println("A : " + A);
+        System.out.println("F : " + F);
+        System.out.println("Check intersection of the two sets :");
 
         Set<Integer> I = new HashSet<>(A);
         I.retainAll(F); // I now contains the intersection of A and F
@@ -224,7 +270,7 @@ public class Encoder {
 
     private void encodeStep(int step) {
         List<Action> actions = problem.getActions();
-
+        // boucle sur les actions
         for (int j = 0; j < actions.size(); j++) {
             Action action = actions.get(j);
             BitVector precondPosAction = action.getPrecondition().getPositiveFluents();
@@ -237,10 +283,17 @@ public class Encoder {
             // ajouter le numéro de l'action
             actionFormula.action = getIndex(j, actionsFirstIndex, step, nbVariables);
 
+            System.out.println("\naction : " + action.getName());
+            System.out.println("actionIndex : " + actionFormula.action + " " + getIndex(j, actionsFirstIndex, step, nbVariables));
+            System.out.println("precondPosAction : " + precondPosAction);
+            System.out.println("effectPosAction : " + effectPosAction);
+            System.out.println("effectNegAction : " + effectNegAction);
+
             // ajouter les fluents positifs de la précondition
             for (int k = 0; k < precondPosAction.size(); k++) {
                 if (precondPosAction.get(k)) {
                     int precondition = getIndex(k, fluentsFirstIndex, step, nbVariables);
+                    System.out.println("precondition : " + precondition);
                     actionFormula.precondPosAction.add(precondition);
                     addActionClause(actionFormula.action, precondition);
                 }
@@ -250,6 +303,7 @@ public class Encoder {
             for (int k = 0; k < effectPosAction.size(); k++) {
                 if (effectPosAction.get(k)) {
                     int posFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
+                    System.out.println("posFluent : " + posFluent);
                     actionFormula.effectPosAction.add(posFluent);
                     addActionClause(actionFormula.action, posFluent);
                     addTransitonClause(actionFormula.action, posFluent, true);
@@ -260,6 +314,7 @@ public class Encoder {
             for (int k = 0; k < effectNegAction.size(); k++) {
                 if (effectNegAction.get(k)) {
                     int negFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
+                    System.out.println("negFluent : " + negFluent);
                     actionFormula.effectNegAction.add(negFluent);
                     addActionClause(actionFormula.action, -negFluent);
                     addTransitonClause(actionFormula.action, negFluent, false);
@@ -280,13 +335,18 @@ public class Encoder {
     }
 
     public void encodeStepWithGoal(int step) {
-        encodeStep(step);
+        encodeStep(step - 1);
         encodedProblem = encodedProblemWithoutGoal;
-        encodeGoal(step + 1);
+        encodeGoal(step);
         checkIntersection();
+        writeToFile();
     }
 
     public ArrayList<ArrayList<Integer>> getEncodedProblem() {
         return encodedProblem;
+    }
+
+    public Set<Integer> getSetA() {
+        return A;
     }
 }
