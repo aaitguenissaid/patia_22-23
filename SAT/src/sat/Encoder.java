@@ -5,7 +5,6 @@ import fr.uga.pddl4j.problem.Problem;
 import fr.uga.pddl4j.problem.operator.Action;
 import fr.uga.pddl4j.util.BitVector;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -201,9 +200,6 @@ public class Encoder {
         PrintWriter writer;
         try {
             String fileName = "results/encodedProblem.txt";
-            File file = new File(fileName);
-            file.delete();
-            file.createNewFile();
             writer = new PrintWriter(fileName, StandardCharsets.UTF_8);
             for (ArrayList<Integer> clause : encodedProblem) {
                 writer.println(clause.toString());
