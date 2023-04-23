@@ -5,6 +5,7 @@ import fr.uga.pddl4j.problem.Problem;
 import fr.uga.pddl4j.problem.operator.Action;
 import fr.uga.pddl4j.util.BitVector;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -199,7 +200,11 @@ public class Encoder {
         // write the CNF problem to a file
         PrintWriter writer;
         try {
-            writer = new PrintWriter("results/encodedProblem.txt", StandardCharsets.UTF_8);
+            String fileName = "results/encodedProblem.txt";
+            File file = new File(fileName);
+            file.delete();
+            file.createNewFile();
+            writer = new PrintWriter(fileName, StandardCharsets.UTF_8);
             for (ArrayList<Integer> clause : encodedProblem) {
                 writer.println(clause.toString());
             }
@@ -283,56 +288,72 @@ public class Encoder {
             // ajouter le numéro de l'action
             actionFormula.action = getIndex(j, actionsFirstIndex, step, nbVariables);
 
-            System.out.println("\naction : " + action.getName());
-            System.out.println("actionIndex : " + actionFormula.action + " " + getIndex(j, actionsFirstIndex, step, nbVariables));
-            System.out.println("precondPosAction : " + precondPosAction);
-            System.out.println("effectPosAction : " + effectPosAction);
-            System.out.println("effectNegAction : " + effectNegAction);
 
-            // ajouter les fluents positifs de la précondition
-            for (int k = 0; k < precondPosAction.size(); k++) {
-                if (precondPosAction.get(k)) {
-                    int precondition = getIndex(k, fluentsFirstIndex, step, nbVariables);
-                    System.out.println("precondition : " + precondition);
-                    actionFormula.precondPosAction.add(precondition);
-                    addActionClause(actionFormula.action, precondition);
-                }
-            }
+            if (!effectPosAction.equals(effectNegAction) || (effectPosAction.length() == 0 || effectNegAction.length() == 0)) {
+                System.err.println("\naction : " + action.getName());
+                System.err.println("actionIndex : " + actionFormula.action);
+                System.err.println("precondPosAction : " + precondPosAction);
+                System.err.println("effectPosAction : " + effectPosAction);
+                System.err.println("effectNegAction : " + effectNegAction);
 
-            // ajouter les fluents positifs de l'effet sur le prochain état
-            for (int k = 0; k < effectPosAction.size(); k++) {
-                if (effectPosAction.get(k)) {
-                    int posFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
-                    System.out.println("posFluent : " + posFluent);
-                    actionFormula.effectPosAction.add(posFluent);
-                    addActionClause(actionFormula.action, posFluent);
-                    addTransitonClause(actionFormula.action, posFluent, true);
+                // ajouter les fluents positifs de la précondition
+                for (int k = 0; k < precondPosAction.size(); k++) {
+                    if (precondPosAction.get(k)) {
+                        int precondition = getIndex(k, fluentsFirstIndex, step, nbVariables);
+                        System.out.println("precondition : " + precondition);
+                        actionFormula.precondPosAction.add(precondition);
+                        addActionClause(actionFormula.action, precondition);
+                    }
                 }
-            }
 
-            // ajouter les fluents négatifs de l'effet sur le prochain état
-            for (int k = 0; k < effectNegAction.size(); k++) {
-                if (effectNegAction.get(k)) {
-                    int negFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
-                    System.out.println("negFluent : " + negFluent);
-                    actionFormula.effectNegAction.add(negFluent);
-                    addActionClause(actionFormula.action, -negFluent);
-                    addTransitonClause(actionFormula.action, negFluent, false);
+                // ajouter les fluents positifs de l'effet sur le prochain état
+                for (int k = 0; k < effectPosAction.size(); k++) {
+                    if (effectPosAction.get(k)) {
+                        int posFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
+                        System.out.println("posFluent : " + posFluent);
+                        actionFormula.effectPosAction.add(posFluent);
+                        addActionClause(actionFormula.action, posFluent);
+                        addTransitonClause(actionFormula.action, posFluent, true);
+                    }
                 }
-            }
 
-            System.out.println("\nActions disjunctions : ");
-            // Action disjunction: at least one action must be executed at each step.
-            // ¬Ai v ¬Bi
-            for (int k = 0; k < actions.size(); k++) {
-                if (j != k) {
-                    int action1 = -getIndex(j, actionsFirstIndex, step, nbVariables);
-                    int action2 = -getIndex(k, actionsFirstIndex, step, nbVariables);
-                    addDisjunctionClause(action1, action2);
+                // ajouter les fluents négatifs de l'effet sur le prochain état
+                for (int k = 0; k < effectNegAction.size(); k++) {
+                    if (effectNegAction.get(k)) {
+                        int negFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
+                        System.out.println("negFluent : " + negFluent);
+                        actionFormula.effectNegAction.add(negFluent);
+                        addActionClause(actionFormula.action, -negFluent);
+                        addTransitonClause(actionFormula.action, negFluent, false);
+                    }
                 }
+
+                System.out.println("\nActions disjunctions : ");
+                // Action disjunction: at least one action must be executed at each step.
+                // ¬Ai v ¬Bi
+                for (int k = 0; k < actions.size(); k++) {
+                    if (j != k) {
+                        Action secondAction = actions.get(k);
+                        BitVector secondEffectPosAction = secondAction.getUnconditionalEffect().getPositiveFluents();
+                        BitVector secondEffectNegAction = secondAction.getUnconditionalEffect().getNegativeFluents();
+                        //TODO review this condition
+                        if ((!effectPosAction.equals(effectNegAction) && !secondEffectPosAction.equals(secondEffectNegAction)) || ((effectPosAction.length() == 0 && effectNegAction.length() == 0) && (secondEffectPosAction.length() == 0 && secondEffectPosAction.length() == 0))) {
+                            int action1 = -getIndex(j, actionsFirstIndex, step, nbVariables);
+                            int action2 = -getIndex(k, actionsFirstIndex, step, nbVariables);
+                            addDisjunctionClause(action1, action2);
+                        }
+                    }
+                }
+            } else {
+                System.err.println("This Action Was Refused : " + action.getName());
+                System.err.println("actionIndex : " + actionFormula.action);
+                System.err.println("precondPosAction : " + precondPosAction);
+                System.err.println("effectPosAction : " + effectPosAction);
+                System.err.println("effectNegAction : " + effectNegAction);
             }
         }
     }
+
 
     public void encodeStepWithGoal(int step) {
         encodeStep(step - 1);

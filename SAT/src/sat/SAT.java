@@ -77,11 +77,11 @@ public class SAT extends AbstractPlanner {
         //ENCODER LE PROBLEME AVANT DE LE RESOUDRE
         Encoder satEncoder = new Encoder(problem);      //créer l'encodeur
         // TODO : get the value of steps from command line
-        int MAX_LOOP = 1;
-        satEncoder.encodeInitAndStepsAndGoal(estimatedSteps);
+        int MAX_LOOP = 512;
+        satEncoder.encodeInitAndStepsAndGoal(estimatedSteps-1);
 
         for (int steps = estimatedSteps; steps < estimatedSteps + MAX_LOOP; steps++) {
-            //satEncoder.encodeStepWithGoal(steps);
+            satEncoder.encodeStepWithGoal(steps);
             ArrayList<ArrayList<Integer>> encodedProblem = satEncoder.getEncodedProblem();  //récupérer le plan
             ISolver solver = SolverFactory.newDefault();
             solver.setTimeout(600);
@@ -115,8 +115,8 @@ public class SAT extends AbstractPlanner {
                     // pour chaque littéral positif du modèle calculé par SAT4J, ajouter l'action correspondante au plan
                     System.out.println("model : " + Arrays.toString(model));
 
-                    String modelPos = "";
-                    String actionsPos = "";
+                    StringBuilder modelPos = new StringBuilder();
+                    StringBuilder actionsPos = new StringBuilder();
 
                     Set<Integer> A = satEncoder.getSetA();
                     Set<Integer> modelSet = new HashSet<>();
@@ -129,10 +129,11 @@ public class SAT extends AbstractPlanner {
                     System.out.println("intersection : " + I);
 
                     for (int m : model) {
-                        //m = m-1;
                         if (m > 0) {
-                            int actionIndex = m % nbVariables;
+                            modelPos.append(m).append(" ");
+                            int actionIndex = m % nbVariables - nbFluents;
                             if (actionIndex >= nbFluents) {
+                                actionsPos.append(actionIndex).append(" ");
                                 Action action = actions.get(actionIndex); //TODO : calculer l'index de l'action
                                 plan.add(0, action);
                             }
@@ -142,7 +143,9 @@ public class SAT extends AbstractPlanner {
                     System.out.println("ModelPos : " + modelPos);
                     System.out.println("actionsPos : " + actionsPos);
                     System.out.print("\n");
-                    if (!plan.isEmpty()) return plan;
+                    if (!plan.isEmpty())
+                        // TODO : check if the plan is valid.
+                        return plan;
                 } else {
                     System.out.println("Unsatisfiable !");
                 }
