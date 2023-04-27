@@ -114,16 +114,15 @@ public class Encoder {
         encodeInitAndSteps(steps);
         encodeGoal(steps);
         checkIntersection();
-        writeToFile();
     }
 
-    public void writeToFile() {
+    public void writeToFile(ArrayList<VecInt> encodedProblemWithGoal) {
         // write the CNF problem to a file
         FileWriter fw;
         try {
             String fileName = "results/encodedProblem.txt";
             fw = new FileWriter(fileName, false);
-            for (VecInt clause : encodedProblem) {
+            for (VecInt clause : encodedProblemWithGoal) {
                 fw.write("{" + clause.toString() + "}\n");
             }
             fw.close();
@@ -145,7 +144,7 @@ public class Encoder {
             int actionIndex = getIndex(j, actionsFirstIndex, step, nbVariables);
 
             //if (!effectPosAction.intersects(effectNegAction) || (effectPosAction.length() == 0 || effectNegAction.length() == 0)) {
-            if (!effectPosAction.intersects(effectNegAction)) {
+            if (!effectPosAction.equals(effectNegAction)) {
             //if (true) {
                 // ajouter les fluents positifs de la précondition
                 for (int k = 0; k < precondPosAction.size(); k++) {
@@ -194,7 +193,7 @@ public class Encoder {
                     BitVector secondEffectPosAction = secondAction.getUnconditionalEffect().getPositiveFluents();
                     BitVector secondEffectNegAction = secondAction.getUnconditionalEffect().getNegativeFluents();
                     //if ((!effectPosAction.intersects(effectNegAction) && !secondEffectPosAction.intersects(secondEffectNegAction)) || ((effectPosAction.length() == 0 && effectNegAction.length() == 0) && (secondEffectPosAction.length() == 0 && secondEffectPosAction.length() == 0))) {
-                    if (!secondEffectPosAction.intersects(secondEffectNegAction)) {
+                    if (!secondEffectPosAction.equals(secondEffectNegAction)) {
                         int secondActionIndex = getIndex(k, actionsFirstIndex, step, nbVariables);
                         // ¬Ai v ¬Bi
                         addDisjunctionClause(-actionIndex, -secondActionIndex);
@@ -214,7 +213,6 @@ public class Encoder {
         encodeStep(step - 1);
         encodeGoal(step);
         checkIntersection();
-        writeToFile();
     }
 
     private void checkIntersection() {
@@ -280,6 +278,7 @@ public class Encoder {
         @SuppressWarnings("unchecked")
         ArrayList<VecInt> encodedProblemWithGoal = (ArrayList<VecInt>) encodedProblem.clone();
         encodedProblemWithGoal.addAll(encodedGoal);
+        writeToFile(encodedProblemWithGoal);
         return encodedProblemWithGoal;
     }
 
