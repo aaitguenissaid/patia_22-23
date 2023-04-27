@@ -72,25 +72,27 @@ public class SAT extends AbstractPlanner {
         final StateHeuristic heuristic = StateHeuristic.getInstance(this.getHeuristic(), problem);
         final State init = new State(problem.getInitialState());
         int estimatedSteps = heuristic.estimate(init, problem.getGoal());
+        estimatedSteps = 1;
         System.out.println("estimatedSteps = " + estimatedSteps);
 
         //ENCODER LE PROBLEME AVANT DE LE RESOUDRE
         Encoder satEncoder = new Encoder(problem);      //créer l'encodeur
         // TODO : get the value of steps from command line
-        int MAX_LOOP = 512;
-        satEncoder.encodeInitAndStepsAndGoal(estimatedSteps-1);
-
+        int MAX_LOOP =64;
+        //estimatedSteps = 1;
+        problem.instantiate();
         for (int steps = estimatedSteps; steps < estimatedSteps + MAX_LOOP; steps++) {
-            satEncoder.encodeStepWithGoal(steps);
-            ArrayList<ArrayList<Integer>> encodedProblem = satEncoder.getEncodedProblem();  //récupérer le plan
+            satEncoder.encodeInitStepsAndGoal(steps);
+            ArrayList<VecInt> encodedProblem = satEncoder.getEncodedProblem();  //récupérer le plan
             ISolver solver = SolverFactory.newDefault();
+            solver.newVar(100000);   // Set maximum number of variables that may arise
+            solver.setExpectedNumberOfClauses(1000000); // Set maximum number of clauses that may arise
             solver.setTimeout(600);
 
             try {
                 // formatter le problème pour SAT4J
-                for (ArrayList<Integer> clause : encodedProblem) {
-                    int[] formattedClause = clause.stream().mapToInt(i -> i).toArray();
-                    solver.addClause(new VecInt(formattedClause));
+                for (VecInt clause : encodedProblem) {
+                    solver.addClause(clause);
                 }
 
                 // tester si le problème est satisfiable et afficher le résultat
@@ -105,9 +107,9 @@ public class SAT extends AbstractPlanner {
                     SequentialPlan plan = new SequentialPlan();
 
                     List<Action> actions = problem.getActions();
-                    int nbActions = actions.size();
-                    int nbFluents = problem.getFluents().size();
-                    int nbVariables = nbFluents + nbActions;
+                    int nbActions = satEncoder.nbActions;
+                    int nbFluents = satEncoder.nbFluents;
+                    int nbVariables = satEncoder.nbVariables;
                     System.out.println("nbFluents : " + nbFluents);
                     System.out.println("nbActions : " + nbActions);
                     System.out.println("nbVariables : " + nbVariables);
@@ -117,6 +119,8 @@ public class SAT extends AbstractPlanner {
 
                     StringBuilder modelPos = new StringBuilder();
                     StringBuilder actionsPos = new StringBuilder();
+                    StringBuilder actionsModulo = new StringBuilder();
+                    StringBuilder actionsIndex = new StringBuilder();
 
                     Set<Integer> A = satEncoder.getSetA();
                     Set<Integer> modelSet = new HashSet<>();
@@ -124,28 +128,43 @@ public class SAT extends AbstractPlanner {
                         if (m > 0) modelSet.add(m);
                     }
                     Set<Integer> I = new HashSet<>(A);
-                    I.retainAll(modelSet); // I now contains the intersection of A and F
-
+                    System.out.println("A : " + A);
+                    System.out.println("modelSet : " + modelSet);
+                    I.retainAll(modelSet); // I now contains the intersection of A and and model
                     System.out.println("intersection : " + I);
+
+                    if(!I.isEmpty()) {
+                        System.out.println("steps : " + steps);
+                        System.out.println("intersection size : " + I.size());
+                        System.out.println("intersection : " + I);
+                    }
 
                     for (int m : model) {
                         if (m > 0) {
                             modelPos.append(m).append(" ");
-                            int actionIndex = m % nbVariables - nbFluents;
-                            if (actionIndex >= nbFluents) {
+                            int actionModulo = satEncoder.decodeIndex(m);
+                            int actionIndex = actionModulo - nbFluents - 1 ;
+                            actionsModulo.append(actionModulo).append(" ");
+                            actionsIndex.append(actionIndex).append(" ");
+                            if (actionIndex >= 0) { // TODO check exclusions of actions
                                 actionsPos.append(actionIndex).append(" ");
                                 Action action = actions.get(actionIndex); //TODO : calculer l'index de l'action
+                                System.out.println("action : " + action.getName());
                                 plan.add(0, action);
                             }
                         }
                     }
                     System.out.println("\nSteps : " + steps);
                     System.out.println("ModelPos : " + modelPos);
+                    System.out.println("actionsModulo : " + actionsModulo);
+                    System.out.println("actionsIndex : " + actionsIndex);
                     System.out.println("actionsPos : " + actionsPos);
                     System.out.print("\n");
-                    if (!plan.isEmpty())
-                        // TODO : check if the plan is valid.
+
+                    // TODO : check if plan is valid
+                    if(!plan.isEmpty()) {
                         return plan;
+                    }
                 } else {
                     System.out.println("Unsatisfiable !");
                 }

@@ -1,13 +1,12 @@
 package sat;
 
-import fr.uga.pddl4j.problem.Fluent;
 import fr.uga.pddl4j.problem.Problem;
 import fr.uga.pddl4j.problem.operator.Action;
 import fr.uga.pddl4j.util.BitVector;
+import org.sat4j.core.VecInt;
 
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,166 +15,88 @@ import java.util.Set;
 public class Encoder {
 
     private final Problem problem;
-    ArrayList<ArrayList<Integer>> encodedProblem = new ArrayList<>();
-    ArrayList<ArrayList<Integer>> encodedProblemWithoutGoal = new ArrayList<>();
+    protected int nbActions;
+    protected int nbFluents;
+    final ArrayList<VecInt> encodedProblem = new ArrayList<>();
+    ArrayList<VecInt> encodedGoal = new ArrayList<>();
     Set<Integer> F = new HashSet<>();
     Set<Integer> A = new HashSet<>();
-    int nbActions;
-    int nbFluents;
     int nbVariables;
     int fluentsFirstIndex;
     int actionsFirstIndex;
 
     public Encoder(Problem problem) {
         this.problem = problem;
+        nbFluents = problem.getFluents().size();
+        nbActions = problem.getActions().size();
+        nbVariables = nbFluents + nbActions;
+        fluentsFirstIndex = 1;
+        actionsFirstIndex = nbFluents + 1;
     }
 
     private int getIndex(int iteration, int firstIndex, int step, int nbVariables) {
         return (iteration + firstIndex) + (step * nbVariables);
     }
 
-    private int getPreviousIndex(int index, int nbVariables) {
-        int result;
-        boolean isNegative = false;
-        if (index < 0) {
-            isNegative = true;
-            index = -index;
-        }
-
-        if (index <= nbVariables) {
-            System.err.println("Error: index=" + index + " is smaller than nbVariables=" + nbVariables + " -> does not have a previous index");
-        }
-
-        result = index - nbVariables;
-
-        if (isNegative) {
-            result = -result;
-        }
-        return result;
-    }
-
     // [-a, ±f]
     private void addActionClause(int actionIndex, int fluentIndex) {
-        ArrayList<Integer> actionClause = new ArrayList<>();
-        actionClause.add(-actionIndex);
-        actionClause.add(fluentIndex);
-        A.add(-actionIndex);
+        VecInt actionClause = new VecInt(new int[]{actionIndex, fluentIndex});
+        A.add(Math.abs(actionIndex));
         F.add(fluentIndex);
         System.out.println("[-a, ±f] : " + actionClause);
-        encodedProblemWithoutGoal.add(actionClause);
+        encodedProblem.add(actionClause);
     }
 
-    private void addTransitonClause(int actionIndex, int fluentIndex, boolean positiveFluent) {
-        ArrayList<Integer> transitionClause = new ArrayList<>();
-        int a = getPreviousIndex(fluentIndex, nbVariables);
-        int b = fluentIndex;
-        int c = actionIndex;
+    private void addTransitonClause(int precPosFluent, int fluentIndex, int actionIndex) {
+        VecInt transitionClause = new VecInt(new int[]{precPosFluent, fluentIndex, actionIndex});
 
-        if (positiveFluent) {
-            b = -b;     // ¬A ∧ B -> C  <==>  A ∨ ¬B ∨ C
-        } else {
-            a = -a;         // A ∧ ¬B -> C  <==>  ¬A ∨ B ∨ C
-        }
-        //System.out.println(" ¬A ∧ B -> C  : " + -a + " ∧ " + b + " -> " + c);
-        transitionClause.add(a);
-        transitionClause.add(b);
-        transitionClause.add(c);
-        F.add(a);
-        F.add(b);
-        A.add(c);
-        if (positiveFluent) {
+        F.add(precPosFluent);
+        F.add(fluentIndex);
+        A.add(Math.abs(actionIndex));
+        if (fluentIndex < 0) {
             System.out.println("[f,-f[i+1],a] : " + transitionClause);
         } else {
             System.out.println("[-f,f[i+1],a] : " + transitionClause);
-
         }
-        encodedProblemWithoutGoal.add(transitionClause);
+        encodedProblem.add(transitionClause);
     }
 
     private void addDisjunctionClause(int action1, int action2) {
-        ArrayList<Integer> disjunctionClause = new ArrayList<>();
-        disjunctionClause.add(action1);
-        disjunctionClause.add(action2);
-        A.add(action1);
-        A.add(action2);
-        System.out.println("[¬A, ¬B] : " + disjunctionClause);
-        encodedProblemWithoutGoal.add(disjunctionClause);
+        VecInt disjunctionClause = new VecInt(new int[]{action1, action2});
+        A.add(Math.abs(action1));
+        A.add(Math.abs(action2));
+        //System.out.println("[¬A, ¬B] : " + disjunctionClause);
+        encodedProblem.add(disjunctionClause);
     }
 
     private void encodeGoal(int steps) {
+        encodedGoal = new ArrayList<>();
         System.out.println("\nGoal : ");
         // ETAT FINAL
         BitVector goalPos = problem.getGoal().getPositiveFluents();
-        BitVector goalNeg = problem.getGoal().getNegativeFluents();
 
         for (int i = 0; i < goalPos.size(); i++) {
             if (goalPos.get(i)) {
-                ArrayList<Integer> goalStateClause = new ArrayList<>();
                 int goalIndex = getIndex(i, fluentsFirstIndex, steps, nbVariables);
-                goalStateClause.add(goalIndex);
+                VecInt goalStateClause = new VecInt(new int[]{goalIndex});
                 F.add(goalIndex);
-                encodedProblem.add(goalStateClause);
+                encodedGoal.add(goalStateClause);
                 System.out.println("goalStateClause : " + goalStateClause);
             }
         }
-        for (int i = 0; i < goalNeg.size(); i++) {
-            if (goalNeg.get(i)) {
-                ArrayList<Integer> goalStateClause = new ArrayList<>();
-                int goalIndex = -getIndex(i, fluentsFirstIndex, steps, nbVariables);
-                goalStateClause.add(goalIndex);
-                F.add(goalIndex);
-                encodedProblem.add(goalStateClause);
-                System.out.println("goalStateClause : " + goalStateClause);
-            }
-        }
-
     }
 
     private void encodeInit() {
-        // get toutes les actions
-        List<Action> actions = problem.getActions();
-        List<Fluent> fluents = problem.getFluents();
-
-        nbActions = actions.size();
-        nbFluents = fluents.size();
-        nbVariables = nbFluents + nbActions;
-        System.out.println("nbActions = " + nbActions);
-        System.out.println("nbFluents = " + nbFluents);
-        System.out.println("nbVariables = " + nbVariables);
-
-        fluentsFirstIndex = 1;
-        actionsFirstIndex = nbFluents + 1;
-        System.out.println("fluentsFirstIndex = " + fluentsFirstIndex);
-        System.out.println("actionsFirstIndex = " + actionsFirstIndex);
-
         // Clause correspondant à l'état initial
         BitVector precondPos = problem.getInitialState().getPositiveFluents();
-        BitVector precondNeg = problem.getInitialState().getNegativeFluents();
-        System.out.println("precondPos size = " + precondPos.size());
-        System.out.println("precondPos = " + precondPos);
-        System.out.println("precondNeg size = " + precondNeg.size());
-        System.out.println("precondNeg = " + precondNeg);
-
-        ArrayList<Integer> initialStateClause;
         for (int j = 0; j < precondPos.size(); j++) {
             if (precondPos.get(j)) {
-                initialStateClause = new ArrayList<>();
-                initialStateClause.add(j + fluentsFirstIndex);
-                encodedProblemWithoutGoal.add(initialStateClause);
+                VecInt initialStateClause = new VecInt(new int[]{(j + fluentsFirstIndex)});
+                encodedProblem.add(initialStateClause);
                 F.add(j + fluentsFirstIndex);
             }
         }
-        for (int j = 0; j < precondNeg.size(); j++) {
-            if (precondNeg.get(j)) {
-                initialStateClause = new ArrayList<>();
-                initialStateClause.add(-(j + fluentsFirstIndex));
-                F.add(-(j + fluentsFirstIndex));
-                encodedProblemWithoutGoal.add(initialStateClause);
-            }
-        }
-
-        System.out.println("initialStateClause : " + encodedProblemWithoutGoal);
-
+        System.out.println("initialStateClause : " + encodedProblem);
     }
 
     public void encodeInitAndSteps(int steps) {
@@ -184,30 +105,115 @@ public class Encoder {
         for (int step = 0; step < steps; step++) {
             encodeStep(step);
         }
-        encodedProblem = encodedProblemWithoutGoal;
         checkIntersection();
     }
 
-    public void encodeInitAndStepsAndGoal(int steps) {
+    public void encodeInitStepsAndGoal(int steps) {
         // Steps loop
         encodeInitAndSteps(steps);
         encodeGoal(steps);
         checkIntersection();
+        writeToFile();
     }
 
     public void writeToFile() {
         // write the CNF problem to a file
-        PrintWriter writer;
+        FileWriter fw;
         try {
             String fileName = "results/encodedProblem.txt";
-            writer = new PrintWriter(fileName, StandardCharsets.UTF_8);
-            for (ArrayList<Integer> clause : encodedProblem) {
-                writer.println(clause.toString());
+            fw = new FileWriter(fileName, false);
+            for (VecInt clause : encodedProblem) {
+                fw.write("{" + clause.toString() + "}\n");
             }
-            writer.close();
+            fw.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void encodeStep(int step) {
+        List<Action> actions = problem.getActions();
+        // boucle sur les actions
+        for (int j = 0; j < actions.size(); j++) {
+            Action action = actions.get(j);
+            BitVector precondPosAction = action.getPrecondition().getPositiveFluents();
+            BitVector effectPosAction = action.getUnconditionalEffect().getPositiveFluents();
+            BitVector effectNegAction = action.getUnconditionalEffect().getNegativeFluents();
+
+            // ajouter le numéro de l'action
+            int actionIndex = getIndex(j, actionsFirstIndex, step, nbVariables);
+
+            //if (!effectPosAction.intersects(effectNegAction) || (effectPosAction.length() == 0 || effectNegAction.length() == 0)) {
+            if (!effectPosAction.intersects(effectNegAction)) {
+            //if (true) {
+                // ajouter les fluents positifs de la précondition
+                for (int k = 0; k < precondPosAction.size(); k++) {
+                    if (precondPosAction.get(k)) {
+                        int precondition = getIndex(k, fluentsFirstIndex, step, nbVariables);
+                        //System.out.println("precondition : " + precondition);
+                        // [-a, +f]
+                        addActionClause(-actionIndex, precondition);
+                    }
+                }
+
+                // ajouter les fluents positifs de l'effet sur le prochain état
+                for (int k = 0; k < effectPosAction.size(); k++) {
+                    if (effectPosAction.get(k)) {
+                        int posFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
+                        int precPosFluent = getIndex(k, fluentsFirstIndex, step, nbVariables);
+                        //System.out.println("posFluent : " + posFluent);
+
+                        // [-a, +f]
+                        addActionClause(-actionIndex, posFluent);
+
+                        // ¬f ∧ f1 -> a  <==>  f ∨ ¬f1 ∨ a
+                        addTransitonClause(precPosFluent, -posFluent, actionIndex);
+                    }
+                }
+
+                // ajouter les fluents négatifs de l'effet sur le prochain état
+                for (int k = 0; k < effectNegAction.size(); k++) {
+                    if (effectNegAction.get(k)) {
+                        int negFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
+                        int precNegFluent = getIndex(k, fluentsFirstIndex, step, nbVariables);
+                        //System.out.println("negFluent : " + negFluent);
+
+                        // [-a, -f]
+                        addActionClause(-actionIndex, -negFluent);
+
+                        // a ∧ ¬f1 -> a  <==>  ¬f ∨ f1 ∨ a
+                        addTransitonClause(-precNegFluent, negFluent, actionIndex);
+                    }
+                }
+
+                //System.out.println("\nActions disjunctions : ");
+                // Action disjunction: at least one action must be executed at each step.
+                for (int k = j + 1; k < actions.size(); k++) {
+                    Action secondAction = actions.get(k);
+                    BitVector secondEffectPosAction = secondAction.getUnconditionalEffect().getPositiveFluents();
+                    BitVector secondEffectNegAction = secondAction.getUnconditionalEffect().getNegativeFluents();
+                    //if ((!effectPosAction.intersects(effectNegAction) && !secondEffectPosAction.intersects(secondEffectNegAction)) || ((effectPosAction.length() == 0 && effectNegAction.length() == 0) && (secondEffectPosAction.length() == 0 && secondEffectPosAction.length() == 0))) {
+                    if (!secondEffectPosAction.intersects(secondEffectNegAction)) {
+                        int secondActionIndex = getIndex(k, actionsFirstIndex, step, nbVariables);
+                        // ¬Ai v ¬Bi
+                        addDisjunctionClause(-actionIndex, -secondActionIndex);
+                    }
+                }
+            } else {
+                System.err.println("\nThis Action Was Refused : " + action.getName());
+                System.err.println("\t\t\tactionIndex : " + actionIndex);
+                System.err.println("\t\t\tprecondPosAction : " + precondPosAction);
+                System.err.println("\t\t\teffectPosAction : " + effectPosAction);
+                System.err.println("\t\t\teffectNegAction : " + effectNegAction);
+            }
+        }
+    }
+
+    public void encodeStepWithGoal(int step) {
+        encodeStep(step - 1);
+        encodeGoal(step);
+        checkIntersection();
+        writeToFile();
     }
 
     private void checkIntersection() {
@@ -235,16 +241,16 @@ public class Encoder {
         }
 
 
-        System.out.println("\nposA : " + posA);
-        System.out.println("posF : " + posF);
+        //System.out.println("\nposA : " + posA);
+        //System.out.println("posF : " + posF);
 
-        System.out.println("\nnegA : " + negA);
-        System.out.println("negF : " + negF);
+        //System.out.println("\nnegA : " + negA);
+        //System.out.println("negF : " + negF);
 
 
-        System.out.println("A : " + A);
-        System.out.println("F : " + F);
-        System.out.println("Check intersection of the two sets :");
+        //System.out.println("A : " + A);
+        //System.out.println("F : " + F);
+        //System.out.println("Check intersection of the two sets :");
 
         Set<Integer> I = new HashSet<>(A);
         I.retainAll(F); // I now contains the intersection of A and F
@@ -269,98 +275,18 @@ public class Encoder {
 
     }
 
-    private void encodeStep(int step) {
-        List<Action> actions = problem.getActions();
-        // boucle sur les actions
-        for (int j = 0; j < actions.size(); j++) {
-            Action action = actions.get(j);
-            BitVector precondPosAction = action.getPrecondition().getPositiveFluents();
-            BitVector effectPosAction = action.getUnconditionalEffect().getPositiveFluents();
-            BitVector effectNegAction = action.getUnconditionalEffect().getNegativeFluents();
-
-            // formule de l'action
-            ActionFormula actionFormula = new ActionFormula();
-
-            // ajouter le numéro de l'action
-            actionFormula.action = getIndex(j, actionsFirstIndex, step, nbVariables);
-
-
-            if (!effectPosAction.equals(effectNegAction) || (effectPosAction.length() == 0 || effectNegAction.length() == 0)) {
-                System.err.println("\naction : " + action.getName());
-                System.err.println("actionIndex : " + actionFormula.action);
-                System.err.println("precondPosAction : " + precondPosAction);
-                System.err.println("effectPosAction : " + effectPosAction);
-                System.err.println("effectNegAction : " + effectNegAction);
-
-                // ajouter les fluents positifs de la précondition
-                for (int k = 0; k < precondPosAction.size(); k++) {
-                    if (precondPosAction.get(k)) {
-                        int precondition = getIndex(k, fluentsFirstIndex, step, nbVariables);
-                        System.out.println("precondition : " + precondition);
-                        actionFormula.precondPosAction.add(precondition);
-                        addActionClause(actionFormula.action, precondition);
-                    }
-                }
-
-                // ajouter les fluents positifs de l'effet sur le prochain état
-                for (int k = 0; k < effectPosAction.size(); k++) {
-                    if (effectPosAction.get(k)) {
-                        int posFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
-                        System.out.println("posFluent : " + posFluent);
-                        actionFormula.effectPosAction.add(posFluent);
-                        addActionClause(actionFormula.action, posFluent);
-                        addTransitonClause(actionFormula.action, posFluent, true);
-                    }
-                }
-
-                // ajouter les fluents négatifs de l'effet sur le prochain état
-                for (int k = 0; k < effectNegAction.size(); k++) {
-                    if (effectNegAction.get(k)) {
-                        int negFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
-                        System.out.println("negFluent : " + negFluent);
-                        actionFormula.effectNegAction.add(negFluent);
-                        addActionClause(actionFormula.action, -negFluent);
-                        addTransitonClause(actionFormula.action, negFluent, false);
-                    }
-                }
-
-                System.out.println("\nActions disjunctions : ");
-                // Action disjunction: at least one action must be executed at each step.
-                // ¬Ai v ¬Bi
-                for (int k = 0; k < actions.size(); k++) {
-                    if (j != k) {
-                        Action secondAction = actions.get(k);
-                        BitVector secondEffectPosAction = secondAction.getUnconditionalEffect().getPositiveFluents();
-                        BitVector secondEffectNegAction = secondAction.getUnconditionalEffect().getNegativeFluents();
-                        //TODO review this condition
-                        if ((!effectPosAction.equals(effectNegAction) && !secondEffectPosAction.equals(secondEffectNegAction)) || ((effectPosAction.length() == 0 && effectNegAction.length() == 0) && (secondEffectPosAction.length() == 0 && secondEffectPosAction.length() == 0))) {
-                            int action1 = -getIndex(j, actionsFirstIndex, step, nbVariables);
-                            int action2 = -getIndex(k, actionsFirstIndex, step, nbVariables);
-                            addDisjunctionClause(action1, action2);
-                        }
-                    }
-                }
-            } else {
-                System.err.println("This Action Was Refused : " + action.getName());
-                System.err.println("actionIndex : " + actionFormula.action);
-                System.err.println("precondPosAction : " + precondPosAction);
-                System.err.println("effectPosAction : " + effectPosAction);
-                System.err.println("effectNegAction : " + effectNegAction);
-            }
-        }
+    public ArrayList<VecInt> getEncodedProblem() {
+        @SuppressWarnings("unchecked")
+        ArrayList<VecInt> encodedProblemWithGoal = (ArrayList<VecInt>) encodedProblem.clone();
+        encodedProblemWithGoal.addAll(encodedGoal);
+        return encodedProblemWithGoal;
     }
 
-
-    public void encodeStepWithGoal(int step) {
-        encodeStep(step - 1);
-        encodedProblem = encodedProblemWithoutGoal;
-        encodeGoal(step);
-        checkIntersection();
-        writeToFile();
-    }
-
-    public ArrayList<ArrayList<Integer>> getEncodedProblem() {
-        return encodedProblem;
+    public int decodeIndex(int encodeedIndex) {
+        int res;
+        int modulo = encodeedIndex%nbVariables;
+        res = (modulo==0) ? nbVariables : modulo;
+        return res;
     }
 
     public Set<Integer> getSetA() {
