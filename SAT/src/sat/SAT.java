@@ -18,7 +18,8 @@ import org.sat4j.specs.ISolver;
 import org.sat4j.specs.TimeoutException;
 import picocli.CommandLine;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The class is an example. It shows how to create a simple SAT search planner able to
@@ -72,17 +73,14 @@ public class SAT extends AbstractPlanner {
         final StateHeuristic heuristic = StateHeuristic.getInstance(this.getHeuristic(), problem);
         final State init = new State(problem.getInitialState());
         int estimatedSteps = heuristic.estimate(init, problem.getGoal());
-        estimatedSteps = 1;
-        System.out.println("estimatedSteps = " + estimatedSteps);
 
         //ENCODER LE PROBLEME AVANT DE LE RESOUDRE
         Encoder satEncoder = new Encoder(problem);      //créer l'encodeur
-        // TODO : get the value of steps from command line
         int MAX_LOOP = 64;
-        //estimatedSteps = 1;
+        satEncoder.encodeInitAndSteps(estimatedSteps - 1);
         problem.instantiate();
         for (int steps = estimatedSteps; steps < estimatedSteps + MAX_LOOP; steps++) {
-            satEncoder.encodeInitStepsAndGoal(steps);
+            satEncoder.encodeStepWithGoal(steps);
             ArrayList<VecInt> encodedProblem = satEncoder.getEncodedProblem();  //récupérer le plan
             ISolver solver = SolverFactory.newDefault();
             solver.newVar(100000);   // Set maximum number of variables that may arise
@@ -97,9 +95,7 @@ public class SAT extends AbstractPlanner {
 
                 // tester si le problème est satisfiable et afficher le résultat
                 if (solver.isSatisfiable()) {
-
-                    System.out.println("\nSatisfiable !");
-
+                    System.err.println("Satisfiable ! steps = " + steps + "");
                     // récupérer le modèle calculé par SAT4J
                     int[] model = solver.findModel();
 
@@ -107,72 +103,35 @@ public class SAT extends AbstractPlanner {
                     SequentialPlan plan = new SequentialPlan();
 
                     List<Action> actions = problem.getActions();
-                    int nbActions = satEncoder.nbActions;
-                    int nbFluents = satEncoder.nbFluents;
-                    int nbVariables = satEncoder.nbVariables;
-                    System.out.println("nbFluents : " + nbFluents);
-                    System.out.println("nbActions : " + nbActions);
-                    System.out.println("nbVariables : " + nbVariables);
+                    System.out.println("intial State : " + problem.getInitialState().getPositiveFluents());
 
-                    // pour chaque littéral positif du modèle calculé par SAT4J, ajouter l'action correspondante au plan
-                    System.out.println("model : " + Arrays.toString(model));
-
-                    StringBuilder modelPos = new StringBuilder();
-                    StringBuilder actionsPos = new StringBuilder();
-                    StringBuilder actionsModulo = new StringBuilder();
-                    StringBuilder actionsIndex = new StringBuilder();
-
-                    Set<Integer> A = satEncoder.getSetA();
-                    Set<Integer> modelSet = new HashSet<>();
-                    for (int m : model) {
-                        if (m > 0) modelSet.add(m);
-                    }
-                    Set<Integer> I = new HashSet<>(A);
-                    System.out.println("A : " + A);
-                    System.out.println("modelSet : " + modelSet);
-                    System.out.println("steps : " + steps);
-                    I.retainAll(modelSet); // I now contains the intersection of A and and model
-                    System.out.print("intersection : ");
-
-                    if(!I.isEmpty()) {
-                        System.out.println(I);
-                        System.out.println("intersection size : " + I.size());
-
-                    }
-
-                    for (int m : model) {
+                    for(int i=model.length-1; i>=0; i--) {
+                        int m = model[i];
                         if (m > 0) {
-                            modelPos.append(m).append(" ");
                             int actionModulo = satEncoder.decodeIndex(m);
-                            int actionIndex = actionModulo - nbFluents - 1 ;
-                            actionsModulo.append(actionModulo).append(" ");
-                            actionsIndex.append(actionIndex).append(" ");
-                            if (actionIndex >= 0) { // TODO check exclusions of actions
-                                actionsPos.append(actionIndex).append(" ");
-                                Action action = actions.get(actionIndex); //TODO : calculer l'index de l'action
-                                System.out.println("action : " + action.getName());
+                            int actionIndex = actionModulo - satEncoder.nbFluents - 1;
+                            if (actionIndex >= 0) {
+                                Action action = actions.get(actionIndex);
+                                System.out.println("action Index = " + m);
+                                System.out.println("action precndition : " + action.getPrecondition().getPositiveFluents());
+                                System.out.println("action pos fluents : " + action.getUnconditionalEffect().getPositiveFluents());
                                 plan.add(0, action);
                             }
                         }
                     }
-                    System.out.println("\nSteps : " + steps);
-                    System.out.println("ModelPos : " + modelPos);
-                    System.out.println("actionsModulo : " + actionsModulo);
-                    System.out.println("actionsIndex : " + actionsIndex);
-                    System.out.println("actionsPos : " + actionsPos);
-                    System.out.print("\n");
+                    System.out.println("Goal State : " + problem.getGoal().getPositiveFluents());
 
-                    // TODO : check if plan is valid
-                    if(!plan.isEmpty()) {
+                    if (!plan.isEmpty()) {
+                        System.out.println("makespan : " + plan.makespan());
                         return plan;
                     }
                 } else {
-                    System.out.println("Unsatisfiable !");
+                    System.err.println("Unsatisfiable ! steps = " + steps + "");
                 }
             } catch (ContradictionException e) {
-                System.out.println("Unsatisfiable (trivial)!");
+                System.err.println("Unsatisfiable (trivial)!");
             } catch (TimeoutException e) {
-                System.out.println("Timeout, sorry!");
+                System.err.println("Timeout, sorry!");
             }
         }
         return null;
