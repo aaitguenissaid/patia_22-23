@@ -78,7 +78,7 @@ public class SAT extends AbstractPlanner {
         //ENCODER LE PROBLEME AVANT DE LE RESOUDRE
         Encoder satEncoder = new Encoder(problem);      //créer l'encodeur
         // TODO : get the value of steps from command line
-        int MAX_LOOP =64;
+        int MAX_LOOP = 64;
         //estimatedSteps = 1;
         problem.instantiate();
         for (int steps = estimatedSteps; steps < estimatedSteps + MAX_LOOP; steps++) {
@@ -164,7 +164,7 @@ public class SAT extends AbstractPlanner {
 
                     // TODO : check if plan is valid
                     if(!plan.isEmpty()) {
-                        //return plan;
+                        return plan;
                     }
                 } else {
                     System.out.println("Unsatisfiable !");
