@@ -130,13 +130,14 @@ public class SAT extends AbstractPlanner {
                     Set<Integer> I = new HashSet<>(A);
                     System.out.println("A : " + A);
                     System.out.println("modelSet : " + modelSet);
+                    System.out.println("steps : " + steps);
                     I.retainAll(modelSet); // I now contains the intersection of A and and model
-                    System.out.println("intersection : " + I);
+                    System.out.print("intersection : ");
 
                     if(!I.isEmpty()) {
-                        System.out.println("steps : " + steps);
+                        System.out.println(I);
                         System.out.println("intersection size : " + I.size());
-                        System.out.println("intersection : " + I);
+
                     }
 
                     for (int m : model) {
@@ -163,7 +164,7 @@ public class SAT extends AbstractPlanner {
 
                     // TODO : check if plan is valid
                     if(!plan.isEmpty()) {
-                        return plan;
+                        //return plan;
                     }
                 } else {
                     System.out.println("Unsatisfiable !");

@@ -17,7 +17,7 @@ public class Encoder {
     private final Problem problem;
     protected int nbActions;
     protected int nbFluents;
-    final ArrayList<VecInt> encodedProblem = new ArrayList<>();
+    ArrayList<VecInt> encodedProblem = new ArrayList<>();
     ArrayList<VecInt> encodedGoal = new ArrayList<>();
     Set<Integer> F = new HashSet<>();
     Set<Integer> A = new HashSet<>();
@@ -87,6 +87,7 @@ public class Encoder {
     }
 
     private void encodeInit() {
+        encodedProblem = new ArrayList<>();
         // Clause correspondant à l'état initial
         BitVector precondPos = problem.getInitialState().getPositiveFluents();
         for (int j = 0; j < precondPos.size(); j++) {
