@@ -1,0 +1,78 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p02.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (52 actions, 38 fluents)
+
+intial State : {19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37}
+action Index = 1158
+action precndition : {0, 8}
+action pos fluents : {9}
+action Index = 1064
+action precndition : {0, 5}
+action pos fluents : {6}
+action Index = 952
+action precndition : {}
+action pos fluents : {8}
+action Index = 896
+action precndition : {0, 14}
+action pos fluents : {15}
+action Index = 801
+action precndition : {0, 10}
+action pos fluents : {12}
+action Index = 685
+action precndition : {}
+action pos fluents : {10}
+action Index = 600
+action precndition : {}
+action pos fluents : {14}
+action Index = 519
+action precndition : {0, 1}
+action pos fluents : {3}
+action Index = 403
+action precndition : {}
+action pos fluents : {1}
+action Index = 318
+action precndition : {}
+action pos fluents : {5}
+action Index = 269
+action precndition : {0, 16}
+action pos fluents : {18}
+action Index = 153
+action precndition : {}
+action pos fluents : {16}
+action Index = 40
+action precndition : {}
+action pos fluents : {0}
+Goal State : {3, 6, 9, 12, 15, 18}
+makespan : 13.0
+
+found plan as follows:
+
+00: (      move rooma roomb) [0]
+01: ( pick ball1 rooma left) [0]
+02: ( drop ball1 roomb left) [0]
+03: (pick ball5 rooma right) [0]
+04: ( pick ball6 rooma left) [0]
+05: ( drop ball6 roomb left) [0]
+06: (pick ball2 rooma right) [0]
+07: ( pick ball3 rooma left) [0]
+08: ( drop ball3 roomb left) [0]
+09: (drop ball2 roomb right) [0]
+10: (pick ball4 rooma right) [0]
+11: (drop ball5 roomb right) [0]
+12: (drop ball4 roomb right) [0]
+
+time spent:       0.03 seconds parsing 
+                  0.04 seconds encoding 
+                  0.00 seconds searching
+                  0.06 seconds total time
+
+memory used:      0.15 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.15 MBytes total
+
+

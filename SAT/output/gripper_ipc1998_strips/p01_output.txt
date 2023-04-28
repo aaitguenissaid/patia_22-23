@@ -1,0 +1,62 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p01.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (36 actions, 28 fluents)
+
+intial State : {13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27}
+action Index = 568
+action precndition : {0, 5}
+action pos fluents : {6}
+action Index = 500
+action precndition : {0, 2}
+action pos fluents : {3}
+action Index = 447
+action precndition : {0, 10}
+action pos fluents : {12}
+action Index = 365
+action precndition : {}
+action pos fluents : {10}
+action Index = 315
+action precndition : {0, 7}
+action pos fluents : {9}
+action Index = 226
+action precndition : {}
+action pos fluents : {2}
+action Index = 158
+action precndition : {}
+action pos fluents : {0}
+action Index = 105
+action precndition : {}
+action pos fluents : {7}
+action Index = 38
+action precndition : {}
+action pos fluents : {5}
+Goal State : {3, 6, 9, 12}
+makespan : 9.0
+
+found plan as follows:
+
+0: (pick ball3 rooma right) [0]
+1: ( pick ball2 rooma left) [0]
+2: (      move rooma roomb) [0]
+3: (pick ball4 rooma right) [0]
+4: ( drop ball2 roomb left) [0]
+5: ( pick ball1 rooma left) [0]
+6: ( drop ball1 roomb left) [0]
+7: (drop ball4 roomb right) [0]
+8: (drop ball3 roomb right) [0]
+
+time spent:       0.02 seconds parsing 
+                  0.03 seconds encoding 
+                  0.00 seconds searching
+                  0.05 seconds total time
+
+memory used:      0.11 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.11 MBytes total
+
+

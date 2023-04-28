@@ -25,8 +25,8 @@ found plan as follows:
 
 time spent:       0.02 seconds parsing 
                   0.04 seconds encoding 
-                  0.02 seconds searching
-                  0.08 seconds total time
+                  0.01 seconds searching
+                  0.07 seconds total time
 
 memory used:      0.35 MBytes for problem representation
                   0.01 MBytes for searching

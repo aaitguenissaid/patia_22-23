@@ -45,10 +45,10 @@ found plan as follows:
 30: (  pick-up c) [0]
 31: (  stack c b) [0]
 
-time spent:       0.02 seconds parsing 
+time spent:       0.03 seconds parsing 
                   0.08 seconds encoding 
-                 16.20 seconds searching
-                 16.31 seconds total time
+                 15.77 seconds searching
+                 15.88 seconds total time
 
 memory used:      0.85 MBytes for problem representation
                 105.45 MBytes for searching

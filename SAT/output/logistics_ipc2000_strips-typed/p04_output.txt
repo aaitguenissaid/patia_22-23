@@ -1,0 +1,134 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p04.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (140 actions, 56 fluents)
+
+intial State : {5, 6, 13, 17, 23, 30, 36, 42, 46, 52, 53, 54, 55}
+action Index = 5247
+action precndition : {5, 33}
+action pos fluents : {35}
+action Index = 5059
+action precndition : {5, 39}
+action pos fluents : {41}
+action Index = 4882
+action precndition : {0}
+action pos fluents : {5}
+action Index = 4676
+action precndition : {46, 47}
+action pos fluents : {16}
+action Index = 4506
+action precndition : {44}
+action pos fluents : {46}
+action Index = 4213
+action precndition : {0, 38}
+action pos fluents : {39}
+action Index = 4009
+action precndition : {0, 32}
+action pos fluents : {33}
+action Index = 3831
+action precndition : {14, 44}
+action pos fluents : {47}
+action Index = 3653
+action precndition : {0, 15}
+action pos fluents : {14}
+action Index = 3449
+action precndition : {0, 2}
+action pos fluents : {1}
+action Index = 3317
+action precndition : {5}
+action pos fluents : {0}
+action Index = 3007
+action precndition : {5, 17}
+action pos fluents : {15}
+action Index = 2919
+action precndition : {44, 51}
+action pos fluents : {38}
+action Index = 2721
+action precndition : {44, 50}
+action pos fluents : {32}
+action Index = 2411
+action precndition : {5, 6}
+action pos fluents : {2}
+action Index = 2327
+action precndition : {44, 49}
+action pos fluents : {26}
+action Index = 2155
+action precndition : {46}
+action pos fluents : {44}
+action Index = 1876
+action precndition : {28, 46}
+action pos fluents : {49}
+action Index = 1682
+action precndition : {34, 46}
+action pos fluents : {50}
+action Index = 1488
+action precndition : {40, 46}
+action pos fluents : {51}
+action Index = 1338
+action precndition : {11, 43}
+action pos fluents : {40}
+action Index = 1134
+action precndition : {11, 37}
+action pos fluents : {34}
+action Index = 930
+action precndition : {11, 31}
+action pos fluents : {28}
+action Index = 779
+action precndition : {13}
+action pos fluents : {11}
+action Index = 488
+action precndition : {13, 36}
+action pos fluents : {37}
+action Index = 284
+action precndition : {13, 30}
+action pos fluents : {31}
+action Index = 104
+action precndition : {13, 42}
+action pos fluents : {43}
+Goal State : {1, 16, 26, 35, 41}
+makespan : 27.0
+
+found plan as follows:
+
+00: (     load-truck obj11 tru1 pos1) [0]
+01: (     load-truck obj13 tru1 pos1) [0]
+02: (     load-truck obj12 tru1 pos1) [0]
+03: (drive-truck tru1 pos1 apt1 cit1) [0]
+04: (   unload-truck obj13 tru1 apt1) [0]
+05: (   unload-truck obj12 tru1 apt1) [0]
+06: (   unload-truck obj11 tru1 apt1) [0]
+07: (  load-airplane obj11 apn1 apt1) [0]
+08: (  load-airplane obj12 apn1 apt1) [0]
+09: (  load-airplane obj13 apn1 apt1) [0]
+10: (    fly-airplane apn1 apt1 apt2) [0]
+11: (unload-airplane obj13 apn1 apt2) [0]
+12: (     load-truck obj23 tru2 pos2) [0]
+13: (unload-airplane obj12 apn1 apt2) [0]
+14: (unload-airplane obj11 apn1 apt2) [0]
+15: (     load-truck obj22 tru2 pos2) [0]
+16: (drive-truck tru2 pos2 apt2 cit2) [0]
+17: (   unload-truck obj23 tru2 apt2) [0]
+18: (   unload-truck obj22 tru2 apt2) [0]
+19: (  load-airplane obj22 apn1 apt2) [0]
+20: (     load-truck obj12 tru2 apt2) [0]
+21: (     load-truck obj11 tru2 apt2) [0]
+22: (    fly-airplane apn1 apt2 apt1) [0]
+23: (unload-airplane obj22 apn1 apt1) [0]
+24: (drive-truck tru2 apt2 pos2 cit2) [0]
+25: (   unload-truck obj11 tru2 pos2) [0]
+26: (   unload-truck obj12 tru2 pos2) [0]
+
+time spent:       0.03 seconds parsing 
+                  0.08 seconds encoding 
+                  0.00 seconds searching
+                  0.11 seconds total time
+
+memory used:      0.43 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.43 MBytes total
+
+

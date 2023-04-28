@@ -1,0 +1,41 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p05.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (100 actions, 68 fluents)
+
+* Starting ASTAR search with FAST_FORWARD heuristic 
+java.lang.OutOfMemoryError: Java heap space
+	at java.base/java.lang.reflect.Field.copy(Field.java:155)
+	at java.base/java.lang.reflect.ReflectAccess.copyField(ReflectAccess.java:109)
+	at java.base/jdk.internal.reflect.ReflectionFactory.copyField(ReflectionFactory.java:324)
+	at java.base/java.lang.Class.copyFields(Class.java:3618)
+	at java.base/java.lang.Class.getDeclaredFields(Class.java:2371)
+	at org.openjdk.jol.info.ClassData.parse(ClassData.java:108)
+	at org.openjdk.jol.info.ClassData.parseClass(ClassData.java:63)
+	at org.openjdk.jol.info.ClassData.addSuperClassData(ClassData.java:189)
+	at org.openjdk.jol.info.ClassData.parse(ClassData.java:104)
+	at org.openjdk.jol.info.ClassData.parseInstance(ClassData.java:53)
+	at org.openjdk.jol.vm.HotspotUnsafe.sizeOf(HotspotUnsafe.java:183)
+	at org.openjdk.jol.info.GraphPathRecord.<init>(GraphPathRecord.java:49)
+	at org.openjdk.jol.info.GraphWalker.peelReferences(GraphWalker.java:122)
+	at org.openjdk.jol.info.GraphWalker.walk(GraphWalker.java:77)
+	at org.openjdk.jol.info.GraphLayout.parseInstance(GraphLayout.java:64)
+	at fr.uga.pddl4j.planners.statespace.search.AStar.search(AStar.java:149)
+	at fr.uga.pddl4j.planners.statespace.search.AbstractStateSpaceSearch.searchSolutionNode(AbstractStateSpaceSearch.java:279)
+	at fr.uga.pddl4j.planners.statespace.AbstractStateSpacePlanner.solve(AbstractStateSpacePlanner.java:266)
+	at fr.uga.pddl4j.planners.AbstractPlanner.solve(AbstractPlanner.java:432)
+	at fr.uga.pddl4j.planners.AbstractPlanner.call(AbstractPlanner.java:487)
+	at fr.uga.pddl4j.planners.AbstractPlanner.call(AbstractPlanner.java:46)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:1953)
+	at picocli.CommandLine.access$1300(CommandLine.java:145)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2358)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2352)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2314)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2179)
+	at picocli.CommandLine$RunLast.execute(CommandLine.java:2316)
+	at picocli.CommandLine.execute(CommandLine.java:2078)
+	at fr.uga.pddl4j.planners.statespace.HSP.main(HSP.java:176)

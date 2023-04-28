@@ -1,0 +1,8 @@
+Checking plan: plans/blocksworld_ipc2000_strips-typed_HSP/p027_filtered_output.txt
+Plan executed successfully - checking goal
+Goal not satisfied
+Plan invalid
+
+
+Failed plans:
+ plans/blocksworld_ipc2000_strips-typed_HSP/p027_filtered_output.txt 

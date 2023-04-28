@@ -1,0 +1,9 @@
+Checking plan: plans/logistics_ipc2000_strips-typed_HSP/p06_filtered_output.txt
+Plan executed successfully - checking goal
+Plan valid
+Final value: 8 
+
+Successful plans:
+Value: 8
+ plans/logistics_ipc2000_strips-typed_HSP/p06_filtered_output.txt 8 
+

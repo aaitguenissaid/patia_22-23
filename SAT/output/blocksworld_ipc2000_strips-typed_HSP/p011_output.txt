@@ -36,9 +36,9 @@ found plan as follows:
 21: (  stack a e) [0]
 
 time spent:       0.02 seconds parsing 
-                  0.05 seconds encoding 
-                  0.28 seconds searching
-                  0.35 seconds total time
+                  0.04 seconds encoding 
+                  0.26 seconds searching
+                  0.32 seconds total time
 
 memory used:      0.45 MBytes for problem representation
                   1.04 MBytes for searching

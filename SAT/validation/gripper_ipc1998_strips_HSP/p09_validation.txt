@@ -1,0 +1,8 @@
+Checking plan: plans/gripper_ipc1998_strips_HSP/p09_filtered_output.txt
+Plan executed successfully - checking goal
+Goal not satisfied
+Plan invalid
+
+
+Failed plans:
+ plans/gripper_ipc1998_strips_HSP/p09_filtered_output.txt 

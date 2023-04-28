@@ -30,9 +30,9 @@ found plan as follows:
 15: (  stack c b) [0]
 
 time spent:       0.02 seconds parsing 
-                  0.05 seconds encoding 
-                  0.13 seconds searching
-                  0.20 seconds total time
+                  0.07 seconds encoding 
+                  0.12 seconds searching
+                  0.21 seconds total time
 
 memory used:      0.57 MBytes for problem representation
                   0.23 MBytes for searching

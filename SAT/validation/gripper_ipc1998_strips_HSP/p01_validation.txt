@@ -1,0 +1,7 @@
+Checking plan: plans/gripper_ipc1998_strips_HSP/p01_filtered_output.txt
+
+Plan failed to execute
+
+
+Failed plans:
+ plans/gripper_ipc1998_strips_HSP/p01_filtered_output.txt 

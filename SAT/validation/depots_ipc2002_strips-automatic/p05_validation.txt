@@ -1,0 +1,8 @@
+Checking plan: plans/depots_ipc2002_strips-automatic/p05_filtered_output.txt
+Plan executed successfully - checking goal
+Goal not satisfied
+Plan invalid
+
+
+Failed plans:
+ plans/depots_ipc2002_strips-automatic/p05_filtered_output.txt 

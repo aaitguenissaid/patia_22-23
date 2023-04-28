@@ -1,0 +1,9 @@
+Checking plan: plans/depots_ipc2002_strips-automatic_HSP/p07_filtered_output.txt
+Plan executed successfully - checking goal
+Plan valid
+Final value: 21 
+
+Successful plans:
+Value: 21
+ plans/depots_ipc2002_strips-automatic_HSP/p07_filtered_output.txt 21 
+

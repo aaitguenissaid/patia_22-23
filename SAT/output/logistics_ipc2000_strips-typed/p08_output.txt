@@ -1,0 +1,82 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p08.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (140 actions, 56 fluents)
+
+intial State : {5, 6, 13, 17, 23, 30, 36, 42, 46, 52, 53, 54, 55}
+action Index = 2691
+action precndition : {5, 27}
+action pos fluents : {29}
+action Index = 2530
+action precndition : {0}
+action pos fluents : {5}
+action Index = 2281
+action precndition : {0, 15}
+action pos fluents : {14}
+action Index = 2041
+action precndition : {0, 26}
+action pos fluents : {27}
+action Index = 1935
+action precndition : {44, 49}
+action pos fluents : {26}
+action Index = 1722
+action precndition : {11, 37}
+action pos fluents : {34}
+action Index = 1567
+action precndition : {46}
+action pos fluents : {44}
+action Index = 1288
+action precndition : {28, 46}
+action pos fluents : {49}
+action Index = 1161
+action precndition : {5}
+action pos fluents : {0}
+action Index = 930
+action precndition : {11, 31}
+action pos fluents : {28}
+action Index = 779
+action precndition : {13}
+action pos fluents : {11}
+action Index = 459
+action precndition : {5, 17}
+action pos fluents : {15}
+action Index = 292
+action precndition : {13, 36}
+action pos fluents : {37}
+action Index = 88
+action precndition : {13, 30}
+action pos fluents : {31}
+Goal State : {6, 14, 23, 29, 34, 42}
+makespan : 14.0
+
+found plan as follows:
+
+00: (     load-truck obj13 tru1 pos1) [0]
+01: (     load-truck obj12 tru1 pos1) [0]
+02: (     load-truck obj22 tru2 pos2) [0]
+03: (drive-truck tru1 pos1 apt1 cit1) [0]
+04: (   unload-truck obj13 tru1 apt1) [0]
+05: (drive-truck tru2 pos2 apt2 cit2) [0]
+06: (  load-airplane obj13 apn1 apt1) [0]
+07: (    fly-airplane apn1 apt1 apt2) [0]
+08: (   unload-truck obj12 tru1 apt1) [0]
+09: (unload-airplane obj13 apn1 apt2) [0]
+10: (     load-truck obj13 tru2 apt2) [0]
+11: (   unload-truck obj22 tru2 apt2) [0]
+12: (drive-truck tru2 apt2 pos2 cit2) [0]
+13: (   unload-truck obj13 tru2 pos2) [0]
+
+time spent:       0.04 seconds parsing 
+                  0.06 seconds encoding 
+                  0.00 seconds searching
+                  0.10 seconds total time
+
+memory used:      0.43 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.43 MBytes total
+
+

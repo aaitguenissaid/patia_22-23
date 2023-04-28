@@ -1,0 +1,9 @@
+Checking plan: plans/depots_ipc2002_strips-automatic/p03_filtered_output.txt
+Plan executed successfully - checking goal
+Plan valid
+Final value: 29 
+
+Successful plans:
+Value: 29
+ plans/depots_ipc2002_strips-automatic/p03_filtered_output.txt 29 
+

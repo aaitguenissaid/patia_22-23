@@ -1,0 +1,106 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p010.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (112 actions, 71 fluents)
+
+intial State : {2, 17, 19, 27, 29, 37, 45, 53, 68}
+action Index = 3581
+action precndition : {9, 13}
+action pos fluents : {2, 7, 40}
+action Index = 3368
+action precndition : {2, 7, 8}
+action pos fluents : {9}
+action Index = 3230
+action precndition : {15, 16}
+action pos fluents : {2, 13, 55}
+action Index = 3004
+action precndition : {2, 13, 14}
+action pos fluents : {15}
+action Index = 2869
+action precndition : {10, 18}
+action pos fluents : {2, 16, 60}
+action Index = 2639
+action precndition : {2, 16, 17}
+action pos fluents : {18}
+action Index = 2486
+action precndition : {0, 12}
+action pos fluents : {2, 10, 43}
+action Index = 2271
+action precndition : {2, 10, 11}
+action pos fluents : {12}
+action Index = 2100
+action precndition : {3, 4}
+action pos fluents : {0, 2, 23}
+action Index = 1970
+action precndition : {0, 2, 27}
+action pos fluents : {3, 16}
+action Index = 1746
+action precndition : {6, 19}
+action pos fluents : {2, 4, 35}
+action Index = 1606
+action precndition : {2, 4, 29}
+action pos fluents : {0, 6}
+action Index = 1362
+action precndition : {9}
+action pos fluents : {2, 7, 8}
+action Index = 1248
+action precndition : {2, 7, 37}
+action pos fluents : {4, 9}
+action Index = 997
+action precndition : {12}
+action pos fluents : {2, 10, 11}
+action Index = 890
+action precndition : {2, 10, 45}
+action pos fluents : {7, 12}
+action Index = 632
+action precndition : {15}
+action pos fluents : {2, 13, 14}
+action Index = 532
+action precndition : {2, 13, 53}
+action pos fluents : {10, 15}
+action Index = 268
+action precndition : {21}
+action pos fluents : {2, 19, 20}
+action Index = 181
+action precndition : {2, 19, 68}
+action pos fluents : {13, 21}
+Goal State : {23, 35, 40, 43, 55, 60}
+makespan : 20.0
+
+found plan as follows:
+
+00: (unstack e g) [0]
+01: ( put-down e) [0]
+02: (unstack g b) [0]
+03: ( put-down g) [0]
+04: (unstack b a) [0]
+05: ( put-down b) [0]
+06: (unstack a f) [0]
+07: ( put-down a) [0]
+08: (unstack f c) [0]
+09: (  stack f e) [0]
+10: (unstack c d) [0]
+11: (  stack c f) [0]
+12: (  pick-up b) [0]
+13: (  stack b c) [0]
+14: (  pick-up d) [0]
+15: (  stack d b) [0]
+16: (  pick-up g) [0]
+17: (  stack g d) [0]
+18: (  pick-up a) [0]
+19: (  stack a g) [0]
+
+time spent:       0.03 seconds parsing 
+                  0.06 seconds encoding 
+                  0.00 seconds searching
+                  0.09 seconds total time
+
+memory used:      0.45 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.45 MBytes total
+
+

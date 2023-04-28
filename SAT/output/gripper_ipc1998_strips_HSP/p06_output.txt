@@ -1,0 +1,31 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p06.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (116 actions, 78 fluents)
+
+* Starting ASTAR search with FAST_FORWARD heuristic 
+java.lang.OutOfMemoryError: Java heap space
+	at java.base/java.util.IdentityHashMap.resize(IdentityHashMap.java:476)
+	at java.base/java.util.IdentityHashMap.put(IdentityHashMap.java:445)
+	at java.base/java.util.Collections$SetFromMap.add(Collections.java:5685)
+	at org.openjdk.jol.info.GraphWalker.walk(GraphWalker.java:78)
+	at org.openjdk.jol.info.GraphLayout.parseInstance(GraphLayout.java:64)
+	at fr.uga.pddl4j.planners.statespace.search.AStar.search(AStar.java:149)
+	at fr.uga.pddl4j.planners.statespace.search.AbstractStateSpaceSearch.searchSolutionNode(AbstractStateSpaceSearch.java:279)
+	at fr.uga.pddl4j.planners.statespace.AbstractStateSpacePlanner.solve(AbstractStateSpacePlanner.java:266)
+	at fr.uga.pddl4j.planners.AbstractPlanner.solve(AbstractPlanner.java:432)
+	at fr.uga.pddl4j.planners.AbstractPlanner.call(AbstractPlanner.java:487)
+	at fr.uga.pddl4j.planners.AbstractPlanner.call(AbstractPlanner.java:46)
+	at picocli.CommandLine.executeUserObject(CommandLine.java:1953)
+	at picocli.CommandLine.access$1300(CommandLine.java:145)
+	at picocli.CommandLine$RunLast.executeUserObjectOfLastSubcommandWithSameParent(CommandLine.java:2358)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2352)
+	at picocli.CommandLine$RunLast.handle(CommandLine.java:2314)
+	at picocli.CommandLine$AbstractParseResultHandler.execute(CommandLine.java:2179)
+	at picocli.CommandLine$RunLast.execute(CommandLine.java:2316)
+	at picocli.CommandLine.execute(CommandLine.java:2078)
+	at fr.uga.pddl4j.planners.statespace.HSP.main(HSP.java:176)

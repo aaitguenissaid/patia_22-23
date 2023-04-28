@@ -24,9 +24,9 @@ found plan as follows:
 09: (  stack d c) [0]
 
 time spent:       0.02 seconds parsing 
-                  0.04 seconds encoding 
+                  0.03 seconds encoding 
                   0.01 seconds searching
-                  0.06 seconds total time
+                  0.05 seconds total time
 
 memory used:      0.18 MBytes for problem representation
                   0.00 MBytes for searching

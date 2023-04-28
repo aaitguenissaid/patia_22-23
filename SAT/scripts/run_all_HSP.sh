@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ..
-folders=("blocksworld_ipc2000_strips-typed" "depots_ipc2002_strips-automatic" "gripper_ipc1998_strips" "logistics_ipc2000_strips-typed")
+folders=("depots_ipc2002_strips-automatic" "gripper_ipc1998_strips" "logistics_ipc2000_strips-typed")
 
 for folder in ${folders[@]}; do
   path="resources/"$folder
@@ -10,8 +10,9 @@ for folder in ${folders[@]}; do
   mkdir -p results
   mkdir -p output/$folder
   mkdir -p validation/$folder
-  echo "Makespan,Total_time" > "results/"$folder"_results.txt"
-  for file in $path/p*.pddl; do
+  results="results/"$folder"_results.csv"
+  echo "Makespan,Total_time" > $results
+  for file in $path/p0?.pddl; do
     filename=$(basename -- "$file" .pddl)
     echo "Processing $file"
     output_file="./output/$folder/"$filename"_output.txt"
@@ -23,7 +24,7 @@ for folder in ${folders[@]}; do
 
     makespan=$(grep -c ^ "$plan_file")
     total_time=$(grep "total time" "$output_file" | grep -oP '\b\d+\.\d+\b')
-    echo "$makespan,$total_time" >> "results/"$folder"_results.txt"
+    echo "$makespan,$total_time" >> $results
     echo "Makespan: $makespan"
     echo "Total time: $total_time"
 

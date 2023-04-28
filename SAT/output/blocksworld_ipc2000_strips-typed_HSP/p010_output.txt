@@ -34,9 +34,9 @@ found plan as follows:
 19: (  stack a g) [0]
 
 time spent:       0.02 seconds parsing 
-                  0.05 seconds encoding 
-                  0.09 seconds searching
-                  0.16 seconds total time
+                  0.06 seconds encoding 
+                  0.10 seconds searching
+                  0.18 seconds total time
 
 memory used:      0.45 MBytes for problem representation
                   0.19 MBytes for searching

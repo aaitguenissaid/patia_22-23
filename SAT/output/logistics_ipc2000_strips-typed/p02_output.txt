@@ -1,0 +1,102 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p02.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (140 actions, 56 fluents)
+
+intial State : {5, 6, 13, 17, 23, 30, 36, 42, 44, 52, 53, 54, 55}
+action Index = 3687
+action precndition : {5, 39}
+action pos fluents : {41}
+action Index = 3505
+action precndition : {44, 50}
+action pos fluents : {32}
+action Index = 3314
+action precndition : {0}
+action pos fluents : {5}
+action Index = 3073
+action precndition : {0, 21}
+action pos fluents : {20}
+action Index = 2841
+action precndition : {0, 38}
+action pos fluents : {39}
+action Index = 2723
+action precndition : {44, 51}
+action pos fluents : {38}
+action Index = 2547
+action precndition : {46}
+action pos fluents : {44}
+action Index = 2272
+action precndition : {40, 46}
+action pos fluents : {51}
+action Index = 2074
+action precndition : {34, 46}
+action pos fluents : {50}
+action Index = 1958
+action precndition : {44}
+action pos fluents : {46}
+action Index = 1749
+action precndition : {5}
+action pos fluents : {0}
+action Index = 1534
+action precndition : {11, 43}
+action pos fluents : {40}
+action Index = 1251
+action precndition : {5, 23}
+action pos fluents : {21}
+action Index = 1126
+action precndition : {11, 31}
+action pos fluents : {28}
+action Index = 938
+action precndition : {11, 37}
+action pos fluents : {34}
+action Index = 779
+action precndition : {13}
+action pos fluents : {11}
+action Index = 480
+action precndition : {13, 30}
+action pos fluents : {31}
+action Index = 300
+action precndition : {13, 42}
+action pos fluents : {43}
+action Index = 96
+action precndition : {13, 36}
+action pos fluents : {37}
+Goal State : {20, 28, 32, 41}
+makespan : 19.0
+
+found plan as follows:
+
+00: (     load-truck obj12 tru1 pos1) [0]
+01: (     load-truck obj11 tru1 pos1) [0]
+02: (     load-truck obj13 tru1 pos1) [0]
+03: (drive-truck tru1 pos1 apt1 cit1) [0]
+04: (   unload-truck obj12 tru1 apt1) [0]
+05: (   unload-truck obj13 tru1 apt1) [0]
+06: (     load-truck obj21 tru2 pos2) [0]
+07: (   unload-truck obj11 tru1 apt1) [0]
+08: (drive-truck tru2 pos2 apt2 cit2) [0]
+09: (    fly-airplane apn1 apt2 apt1) [0]
+10: (  load-airplane obj12 apn1 apt1) [0]
+11: (  load-airplane obj11 apn1 apt1) [0]
+12: (    fly-airplane apn1 apt1 apt2) [0]
+13: (unload-airplane obj11 apn1 apt2) [0]
+14: (     load-truck obj11 tru2 apt2) [0]
+15: (   unload-truck obj21 tru2 apt2) [0]
+16: (drive-truck tru2 apt2 pos2 cit2) [0]
+17: (unload-airplane obj12 apn1 apt2) [0]
+18: (   unload-truck obj11 tru2 pos2) [0]
+
+time spent:       0.05 seconds parsing 
+                  0.09 seconds encoding 
+                  0.00 seconds searching
+                  0.13 seconds total time
+
+memory used:      0.43 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.43 MBytes total
+
+

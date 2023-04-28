@@ -1,0 +1,86 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p02.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (210 actions, 82 fluents)
+
+intial State : {0, 3, 6, 7, 8, 9, 20, 22, 27, 38, 44, 50, 57, 59, 62, 64, 76, 77, 78, 79, 80, 81}
+action Index = 4302
+action precndition : {22, 54, 57}
+action pos fluents : {18, 31, 50, 53}
+action Index = 4076
+action precndition : {4, 50, 71}
+action pos fluents : {54}
+action Index = 3597
+action precndition : {3}
+action pos fluents : {4}
+action Index = 3437
+action precndition : {15, 61}
+action pos fluents : {9, 14, 59, 60}
+action Index = 3115
+action precndition : {11, 34}
+action pos fluents : {6, 20, 32, 33}
+action Index = 2902
+action precndition : {3, 6, 73}
+action pos fluents : {34}
+action Index = 2434
+action precndition : {5}
+action pos fluents : {3}
+action Index = 2330
+action precndition : {5, 59, 69}
+action pos fluents : {61}
+action Index = 2016
+action precndition : {5, 63}
+action pos fluents : {59, 71}
+action Index = 1626
+action precndition : {18, 27, 59, 62}
+action pos fluents : {15, 63}
+action Index = 1434
+action precndition : {5, 65}
+action pos fluents : {59, 73}
+action Index = 1051
+action precndition : {20, 38, 59, 64}
+action pos fluents : {18, 65}
+action Index = 678
+action precndition : {3}
+action pos fluents : {5}
+action Index = 538
+action precndition : {3, 10}
+action pos fluents : {6, 69}
+action Index = 101
+action precndition : {6, 7, 8, 9}
+action pos fluents : {10, 11}
+Goal State : {14, 31, 33, 44}
+makespan : 15.0
+
+found plan as follows:
+
+00: (       lift hoist0 crate0 pallet0 depot0) [0]
+01: (        load hoist0 crate0 truck1 depot0) [0]
+02: (        drive truck1 depot0 distributor1) [0]
+03: (  lift hoist2 crate2 crate1 distributor1) [0]
+04: (  load hoist2 crate2 truck1 distributor1) [0]
+05: ( lift hoist2 crate1 pallet2 distributor1) [0]
+06: (  load hoist2 crate1 truck1 distributor1) [0]
+07: (unload hoist2 crate0 truck1 distributor1) [0]
+08: (        drive truck1 distributor1 depot0) [0]
+09: (      unload hoist0 crate2 truck1 depot0) [0]
+10: (       drop hoist0 crate2 pallet0 depot0) [0]
+11: ( drop hoist2 crate0 pallet2 distributor1) [0]
+12: (        drive truck1 depot0 distributor0) [0]
+13: (unload hoist1 crate1 truck1 distributor0) [0]
+14: (  drop hoist1 crate1 crate3 distributor0) [0]
+
+time spent:       0.03 seconds parsing 
+                  0.14 seconds encoding 
+                  0.00 seconds searching
+                  0.17 seconds total time
+
+memory used:      0.90 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.90 MBytes total
+
+

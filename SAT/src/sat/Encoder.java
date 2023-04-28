@@ -185,9 +185,9 @@ public class Encoder {
                     addDisjunctionClause(-actionIndex, -secondActionIndex);
                 }
             } else {
-                System.err.println("Action " + action.getName() + " has no effect.");
-                System.err.println("positive fluents: " + effectPosAction);
-                System.err.println("negative fluents: " + effectNegAction);
+                //System.err.println("Action " + action.getName() + " has no effect.");
+                //System.err.println("positive fluents: " + effectPosAction);
+                //System.err.println("negative fluents: " + effectNegAction);
             }
         }
 

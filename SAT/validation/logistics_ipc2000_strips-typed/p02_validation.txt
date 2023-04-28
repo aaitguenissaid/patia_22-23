@@ -1,0 +1,9 @@
+Checking plan: plans/logistics_ipc2000_strips-typed/p02_filtered_output.txt
+Plan executed successfully - checking goal
+Plan valid
+Final value: 19 
+
+Successful plans:
+Value: 19
+ plans/logistics_ipc2000_strips-typed/p02_filtered_output.txt 19 
+

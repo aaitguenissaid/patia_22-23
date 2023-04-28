@@ -1,0 +1,50 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p001.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (40 actions, 29 fluents)
+
+intial State : {0, 1, 2, 4, 5, 7, 8, 10, 11}
+action Index = 386
+action precndition : {3, 10}
+action pos fluents : {0, 2, 16}
+action Index = 306
+action precndition : {0, 1, 2}
+action pos fluents : {3}
+action Index = 258
+action precndition : {4, 12}
+action pos fluents : {2, 10, 26}
+action Index = 171
+action precndition : {2, 10, 11}
+action pos fluents : {12}
+action Index = 113
+action precndition : {6, 7}
+action pos fluents : {2, 4, 19}
+action Index = 31
+action precndition : {2, 4, 5}
+action pos fluents : {6}
+Goal State : {16, 19, 26}
+makespan : 6.0
+
+found plan as follows:
+
+0: (pick-up b) [0]
+1: (stack b a) [0]
+2: (pick-up c) [0]
+3: (stack c b) [0]
+4: (pick-up d) [0]
+5: (stack d c) [0]
+
+time spent:       0.02 seconds parsing 
+                  0.04 seconds encoding 
+                  0.00 seconds searching
+                  0.05 seconds total time
+
+memory used:      0.19 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.19 MBytes total
+
+

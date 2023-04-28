@@ -20,7 +20,7 @@ found plan as follows:
 5: (stack d c) [0]
 
 time spent:       0.02 seconds parsing 
-                  0.04 seconds encoding 
+                  0.03 seconds encoding 
                   0.01 seconds searching
                   0.06 seconds total time
 

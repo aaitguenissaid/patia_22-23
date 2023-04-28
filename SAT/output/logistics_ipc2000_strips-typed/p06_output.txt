@@ -1,0 +1,58 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p06.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (140 actions, 56 fluents)
+
+intial State : {5, 6, 13, 17, 23, 30, 36, 42, 44, 52, 53, 54, 55}
+action Index = 1526
+action precndition : {11, 37}
+action pos fluents : {34}
+action Index = 1293
+action precndition : {0, 2}
+action pos fluents : {1}
+action Index = 1171
+action precndition : {13}
+action pos fluents : {11}
+action Index = 917
+action precndition : {0, 21}
+action pos fluents : {20}
+action Index = 769
+action precndition : {5}
+action pos fluents : {0}
+action Index = 451
+action precndition : {5, 6}
+action pos fluents : {2}
+action Index = 292
+action precndition : {13, 36}
+action pos fluents : {37}
+action Index = 75
+action precndition : {5, 23}
+action pos fluents : {21}
+Goal State : {1, 17, 20, 30, 34}
+makespan : 8.0
+
+found plan as follows:
+
+0: (     load-truck obj21 tru2 pos2) [0]
+1: (     load-truck obj12 tru1 pos1) [0]
+2: (     load-truck obj23 tru2 pos2) [0]
+3: (drive-truck tru2 pos2 apt2 cit2) [0]
+4: (   unload-truck obj21 tru2 apt2) [0]
+5: (drive-truck tru1 pos1 apt1 cit1) [0]
+6: (   unload-truck obj23 tru2 apt2) [0]
+7: (   unload-truck obj12 tru1 apt1) [0]
+
+time spent:       0.03 seconds parsing 
+                  0.07 seconds encoding 
+                  0.00 seconds searching
+                  0.10 seconds total time
+
+memory used:      0.43 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.43 MBytes total
+
+

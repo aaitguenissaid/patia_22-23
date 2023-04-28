@@ -1,0 +1,59 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p024.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (264 actions, 155 fluents)
+
+* Starting ASTAR search with FAST_FORWARD heuristic 
+* ASTAR search succeeded
+
+found plan as follows:
+
+00: (unstack b h) [0]
+01: (  stack b i) [0]
+02: (unstack h k) [0]
+03: (  stack h b) [0]
+04: (unstack k f) [0]
+05: ( put-down k) [0]
+06: (unstack f c) [0]
+07: (  stack f k) [0]
+08: (unstack c d) [0]
+09: ( put-down c) [0]
+10: (unstack d j) [0]
+11: (  stack d c) [0]
+12: (unstack j a) [0]
+13: (  stack j d) [0]
+14: (  pick-up a) [0]
+15: (  stack a f) [0]
+16: (unstack h b) [0]
+17: (  stack h a) [0]
+18: (unstack b i) [0]
+19: (  stack b h) [0]
+20: (unstack j d) [0]
+21: (  stack j b) [0]
+22: (unstack i e) [0]
+23: ( put-down i) [0]
+24: (unstack e g) [0]
+25: (  stack e j) [0]
+26: (unstack d c) [0]
+27: (  stack d e) [0]
+28: (  pick-up c) [0]
+29: (  stack c d) [0]
+30: (  pick-up g) [0]
+31: (  stack g c) [0]
+32: (  pick-up i) [0]
+33: (  stack i g) [0]
+
+time spent:       0.02 seconds parsing 
+                  0.07 seconds encoding 
+                 15.75 seconds searching
+                 15.84 seconds total time
+
+memory used:      1.01 MBytes for problem representation
+                 91.02 MBytes for searching
+                 92.03 MBytes total
+
+

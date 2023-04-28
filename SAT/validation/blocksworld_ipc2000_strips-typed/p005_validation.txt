@@ -1,0 +1,9 @@
+Checking plan: plans/blocksworld_ipc2000_strips-typed/p005_filtered_output.txt
+Plan executed successfully - checking goal
+Plan valid
+Final value: 10 
+
+Successful plans:
+Value: 10
+ plans/blocksworld_ipc2000_strips-typed/p005_filtered_output.txt 10 
+

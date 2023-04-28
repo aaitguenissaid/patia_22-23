@@ -1,0 +1,74 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p004.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (60 actions, 41 fluents)
+
+intial State : {2, 8, 10, 13, 14, 18, 21, 32}
+action Index = 1174
+action precndition : {4, 9}
+action pos fluents : {2, 7, 27}
+action Index = 1054
+action precndition : {2, 7, 8}
+action pos fluents : {9}
+action Index = 966
+action precndition : {0, 6}
+action pos fluents : {2, 4, 21}
+action Index = 851
+action precndition : {2, 4, 5}
+action pos fluents : {6}
+action Index = 763
+action precndition : {3, 13}
+action pos fluents : {0, 2, 20}
+action Index = 685
+action precndition : {0, 2, 18}
+action pos fluents : {3, 7}
+action Index = 553
+action precndition : {6}
+action pos fluents : {2, 4, 5}
+action Index = 486
+action precndition : {2, 4, 21}
+action pos fluents : {0, 6}
+action Index = 378
+action precndition : {10, 15}
+action pos fluents : {2, 13, 39}
+action Index = 248
+action precndition : {2, 13, 14}
+action pos fluents : {15}
+action Index = 151
+action precndition : {12}
+action pos fluents : {2, 10, 11}
+action Index = 93
+action precndition : {2, 10, 32}
+action pos fluents : {4, 12}
+Goal State : {20, 21, 27, 39}
+makespan : 12.0
+
+found plan as follows:
+
+00: (unstack c e) [0]
+01: ( put-down c) [0]
+02: (  pick-up d) [0]
+03: (  stack d c) [0]
+04: (unstack e b) [0]
+05: ( put-down e) [0]
+06: (unstack b a) [0]
+07: (  stack b d) [0]
+08: (  pick-up e) [0]
+09: (  stack e b) [0]
+10: (  pick-up a) [0]
+11: (  stack a e) [0]
+
+time spent:       0.02 seconds parsing 
+                  0.05 seconds encoding 
+                  0.00 seconds searching
+                  0.08 seconds total time
+
+memory used:      0.26 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.26 MBytes total
+
+

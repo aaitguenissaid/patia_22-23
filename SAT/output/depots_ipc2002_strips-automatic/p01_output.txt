@@ -1,0 +1,66 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p01.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (90 actions, 46 fluents)
+
+intial State : {2, 3, 6, 9, 12, 15, 18, 19, 20, 26, 27, 31, 40, 41, 42, 43, 44, 45}
+action Index = 1331
+action precndition : {15, 33}
+action pos fluents : {9, 14, 31, 32}
+action Index = 1222
+action precndition : {5, 31, 37}
+action pos fluents : {33}
+action Index = 1013
+action precndition : {4}
+action pos fluents : {5}
+action Index = 920
+action precndition : {13, 30}
+action pos fluents : {18, 22, 26, 29}
+action Index = 812
+action precndition : {4, 26, 39}
+action pos fluents : {30}
+action Index = 662
+action precndition : {4, 28}
+action pos fluents : {26, 37}
+action Index = 465
+action precndition : {3}
+action pos fluents : {4}
+action Index = 348
+action precndition : {9, 12, 26, 27}
+action pos fluents : {13, 28}
+action Index = 252
+action precndition : {3, 21}
+action pos fluents : {6, 39}
+action Index = 70
+action precndition : {6, 18, 19, 20}
+action pos fluents : {11, 21}
+Goal State : {14, 22}
+makespan : 10.0
+
+found plan as follows:
+
+00: (       lift hoist0 crate1 pallet0 depot0) [0]
+01: (        load hoist0 crate1 truck1 depot0) [0]
+02: ( lift hoist1 crate0 pallet1 distributor0) [0]
+03: (        drive truck1 depot0 distributor0) [0]
+04: (  load hoist1 crate0 truck1 distributor0) [0]
+05: (unload hoist1 crate1 truck1 distributor0) [0]
+06: ( drop hoist1 crate1 pallet1 distributor0) [0]
+07: (  drive truck1 distributor0 distributor1) [0]
+08: (unload hoist2 crate0 truck1 distributor1) [0]
+09: ( drop hoist2 crate0 pallet2 distributor1) [0]
+
+time spent:       0.03 seconds parsing 
+                  0.07 seconds encoding 
+                  0.00 seconds searching
+                  0.09 seconds total time
+
+memory used:      0.41 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.41 MBytes total
+
+

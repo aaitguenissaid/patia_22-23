@@ -1,0 +1,90 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p006.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (60 actions, 41 fluents)
+
+intial State : {2, 11, 13, 19, 21, 27, 38}
+action Index = 1588
+action precndition : {4, 15}
+action pos fluents : {2, 13, 37}
+action Index = 1460
+action precndition : {2, 13, 14}
+action pos fluents : {15}
+action Index = 1373
+action precndition : {6, 10}
+action pos fluents : {2, 4, 24}
+action Index = 1255
+action precndition : {2, 4, 5}
+action pos fluents : {6}
+action Index = 1180
+action precndition : {7, 12}
+action pos fluents : {2, 10, 33}
+action Index = 1055
+action precndition : {2, 10, 11}
+action pos fluents : {12}
+action Index = 971
+action precndition : {0, 9}
+action pos fluents : {2, 7, 26}
+action Index = 852
+action precndition : {2, 7, 8}
+action pos fluents : {9}
+action Index = 754
+action precndition : {3}
+action pos fluents : {0, 1, 2}
+action Index = 686
+action precndition : {0, 2, 19}
+action pos fluents : {3, 10}
+action Index = 553
+action precndition : {6}
+action pos fluents : {2, 4, 5}
+action Index = 486
+action precndition : {2, 4, 21}
+action pos fluents : {0, 6}
+action Index = 352
+action precndition : {9}
+action pos fluents : {2, 7, 8}
+action Index = 290
+action precndition : {2, 7, 27}
+action pos fluents : {4, 9}
+action Index = 152
+action precndition : {15}
+action pos fluents : {2, 13, 14}
+action Index = 99
+action precndition : {2, 13, 38}
+action pos fluents : {7, 15}
+Goal State : {24, 26, 33, 37}
+makespan : 16.0
+
+found plan as follows:
+
+00: (unstack d e) [0]
+01: ( put-down d) [0]
+02: (unstack e c) [0]
+03: ( put-down e) [0]
+04: (unstack c a) [0]
+05: ( put-down c) [0]
+06: (unstack a b) [0]
+07: ( put-down a) [0]
+08: (  pick-up e) [0]
+09: (  stack e a) [0]
+10: (  pick-up b) [0]
+11: (  stack b e) [0]
+12: (  pick-up c) [0]
+13: (  stack c b) [0]
+14: (  pick-up d) [0]
+15: (  stack d c) [0]
+
+time spent:       0.03 seconds parsing 
+                  0.05 seconds encoding 
+                  0.00 seconds searching
+                  0.09 seconds total time
+
+memory used:      0.26 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.26 MBytes total
+
+

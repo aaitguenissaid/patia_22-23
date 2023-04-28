@@ -1,0 +1,66 @@
+WARNING: sun.reflect.Reflection.getCallerClass is not supported. This will impact performance.
+
+parsing domain file "domain.pddl" done successfully
+parsing problem file "p002.pddl" done successfully
+# WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf
+# WARNING: Unable to attach Serviceability Agent. sun.jvm.hotspot.memory.Universe.getNarrowOopBase()
+
+problem instantiation done successfully (40 actions, 29 fluents)
+
+intial State : {2, 8, 10, 15, 17, 26}
+action Index = 668
+action precndition : {4, 9}
+action pos fluents : {2, 7, 22}
+action Index = 584
+action precndition : {2, 7, 8}
+action pos fluents : {9}
+action Index = 525
+action precndition : {0, 6}
+action pos fluents : {2, 4, 17}
+action Index = 445
+action precndition : {2, 4, 5}
+action pos fluents : {6}
+action Index = 386
+action precndition : {3, 10}
+action pos fluents : {0, 2, 16}
+action Index = 332
+action precndition : {0, 2, 15}
+action pos fluents : {3, 7}
+action Index = 242
+action precndition : {6}
+action pos fluents : {2, 4, 5}
+action Index = 196
+action precndition : {2, 4, 17}
+action pos fluents : {0, 6}
+action Index = 106
+action precndition : {12}
+action pos fluents : {2, 10, 11}
+action Index = 67
+action precndition : {2, 10, 26}
+action pos fluents : {4, 12}
+Goal State : {16, 17, 22}
+makespan : 10.0
+
+found plan as follows:
+
+00: (unstack b c) [0]
+01: ( put-down b) [0]
+02: (unstack c a) [0]
+03: ( put-down c) [0]
+04: (unstack a d) [0]
+05: (  stack a b) [0]
+06: (  pick-up c) [0]
+07: (  stack c a) [0]
+08: (  pick-up d) [0]
+09: (  stack d c) [0]
+
+time spent:       0.03 seconds parsing 
+                  0.04 seconds encoding 
+                  0.00 seconds searching
+                  0.07 seconds total time
+
+memory used:      0.18 MBytes for problem representation
+                  0.00 MBytes for searching
+                  0.18 MBytes total
+
+
