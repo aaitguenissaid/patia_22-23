@@ -5,13 +5,14 @@ folders=("blocksworld_ipc2000_strips-typed" "depots_ipc2002_strips-automatic" "g
 for folder in ${folders[@]}; do
   path="resources/"$folder
   echo -e "\nProcessing $folder"
+
   mkdir -p plans/$folder
   mkdir -p results
   mkdir -p output/$folder
   mkdir -p validation/$folder
   results="results/"$folder"_results.csv"
   echo "Makespan,Total_time" > $results
-  for file in $(ls $path/p*.pddl | head -10); do
+  for file in $path/p*.pddl; do
     filename=$(basename -- "$file" .pddl)
     echo "Processing $file"
     output_file="./output/$folder/"$filename"_output.txt"

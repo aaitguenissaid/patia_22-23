@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ..
-folders=("depots_ipc2002_strips-automatic" "gripper_ipc1998_strips" "logistics_ipc2000_strips-typed")
+folders=("blocksworld_ipc2000_strips-typed" "depots_ipc2002_strips-automatic" "gripper_ipc1998_strips" "logistics_ipc2000_strips-typed")
 
 for folder in ${folders[@]}; do
   path="resources/"$folder
@@ -12,11 +12,12 @@ for folder in ${folders[@]}; do
   mkdir -p validation/$folder
   results="results/"$folder"_results.csv"
   echo "Makespan,Total_time" > $results
-  for file in $path/p0?.pddl; do
+  for file in $path/p*.pddl; do
     filename=$(basename -- "$file" .pddl)
     echo "Processing $file"
     output_file="./output/$folder/"$filename"_output.txt"
     plan_file="plans/"$folder"/"$filename"_filtered_output.txt"
+
     java -cp lib/pddl4j-4.0.0.jar fr.uga.pddl4j.planners.statespace.HSP $path/"domain.pddl" $file  -t 600 > $output_file
 
     # Récupérer les lignes contenant les actions du plan
