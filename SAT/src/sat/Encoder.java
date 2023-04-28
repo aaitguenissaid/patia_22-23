@@ -149,38 +149,45 @@ public class Encoder {
 
             // recuperer l'indice de l'action
             int actionIndex = getIndex(j, actionsFirstIndex, step, nbVariables);
-            // ajouter les fluents positifs de la précondition
-            for (int k = 0; k < precondPosAction.size(); k++) {
-                if (precondPosAction.get(k)) {
-                    int precondition = getIndex(k, fluentsFirstIndex, step, nbVariables);
-                    // [-a, +f]
-                    addActionClause(-actionIndex, precondition);
-                }
-            }
 
-            // ajouter les fluents positifs de l'effet sur le prochain état
-            for (int k = 0; k < effectPosAction.size(); k++) {
-                if (effectPosAction.get(k)) {
-                    int posFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
-                    // [-a, +f]
-                    addActionClause(-actionIndex, posFluent);
+            if (!effectPosAction.intersects(effectNegAction) && !(effectPosAction.size() == 0 && effectNegAction.size() == 0)) {
+                // ajouter les fluents positifs de la précondition
+                for (int k = 0; k < precondPosAction.size(); k++) {
+                    if (precondPosAction.get(k)) {
+                        int precondition = getIndex(k, fluentsFirstIndex, step, nbVariables);
+                        // [-a, +f]
+                        addActionClause(-actionIndex, precondition);
+                    }
                 }
-            }
 
-            // ajouter les fluents négatifs de l'effet sur le prochain état
-            for (int k = 0; k < effectNegAction.size(); k++) {
-                if (effectNegAction.get(k)) {
-                    int negFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
-                    // [-a, -f]
-                    addActionClause(-actionIndex, -negFluent);
+                // ajouter les fluents positifs de l'effet sur le prochain état
+                for (int k = 0; k < effectPosAction.size(); k++) {
+                    if (effectPosAction.get(k)) {
+                        int posFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
+                        // [-a, +f]
+                        addActionClause(-actionIndex, posFluent);
+                    }
                 }
-            }
 
-            // Action disjunction: at least one action must be executed at each step.
-            for (int k = j + 1; k < actions.size(); k++) {
-                int secondActionIndex = getIndex(k, actionsFirstIndex, step, nbVariables);
-                // ¬Ai v ¬Bi
-                addDisjunctionClause(-actionIndex, -secondActionIndex);
+                // ajouter les fluents négatifs de l'effet sur le prochain état
+                for (int k = 0; k < effectNegAction.size(); k++) {
+                    if (effectNegAction.get(k)) {
+                        int negFluent = getIndex(k, fluentsFirstIndex, step + 1, nbVariables);
+                        // [-a, -f]
+                        addActionClause(-actionIndex, -negFluent);
+                    }
+                }
+
+                // Action disjunction: at least one action must be executed at each step.
+                for (int k = j + 1; k < actions.size(); k++) {
+                    int secondActionIndex = getIndex(k, actionsFirstIndex, step, nbVariables);
+                    // ¬Ai v ¬Bi
+                    addDisjunctionClause(-actionIndex, -secondActionIndex);
+                }
+            } else {
+                System.err.println("Action " + action.getName() + " has no effect.");
+                System.err.println("positive fluents: " + effectPosAction);
+                System.err.println("negative fluents: " + effectNegAction);
             }
         }
 
@@ -196,16 +203,20 @@ public class Encoder {
 
             for (int j = 0; j < actions.size(); j++) {
                 Action action = actions.get(j);
-                int actionIndex = getIndex(j, actionsFirstIndex, step, nbVariables);
+                BitVector effectPosAction = action.getUnconditionalEffect().getPositiveFluents();
+                BitVector effectNegAction = action.getUnconditionalEffect().getNegativeFluents();
+                if (!effectPosAction.intersects(effectNegAction) && !(effectPosAction.size() == 0 && effectNegAction.size() == 0)) {
+                    int actionIndex = getIndex(j, actionsFirstIndex, step, nbVariables);
 
-                // ¬f ∧ f1 -> a  <==>  f ∨ ¬f1 ∨ {aj0 ∨ aj1 ...}
-                if (action.getUnconditionalEffect().getPositiveFluents().get(i)) {
-                    posClause.push(actionIndex);
-                }
+                    // ¬f ∧ f1 -> a  <==>  f ∨ ¬f1 ∨ {aj0 ∨ aj1 ...}
+                    if (action.getUnconditionalEffect().getPositiveFluents().get(i)) {
+                        posClause.push(actionIndex);
+                    }
 
-                // f ∧ ¬f1 -> a  <==>  ¬f ∨ f1 ∨ {ai0 ∨ ai1 ...}
-                if (action.getUnconditionalEffect().getNegativeFluents().get(i)) {
-                    negClause.push(actionIndex);
+                    // f ∧ ¬f1 -> a  <==>  ¬f ∨ f1 ∨ {ai0 ∨ ai1 ...}
+                    if (action.getUnconditionalEffect().getNegativeFluents().get(i)) {
+                        negClause.push(actionIndex);
+                    }
                 }
             }
             if (posClause.size() > 2) {
@@ -292,6 +303,7 @@ public class Encoder {
     public ArrayList<VecInt> getEncodedGoal() {
         return encodedGoal;
     }
+
     public ArrayList<VecInt> getEncodedInit() {
         return encodedGoal;
     }

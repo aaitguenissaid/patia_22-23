@@ -1,14 +1,14 @@
 #!/bin/bash
 cd ..
-path="resources/logistics_ipc2000_strips-typed"
-folder="logistics_ipc2000_strips-typed"
+path="resources/gripper_ipc1998_strips"
+folder="gripper_ipc1998_strips"
 mkdir -p plans/$folder
 mkdir -p results
 mkdir -p output/$folder
 mkdir -p validation/$folder
 echo "Makespan,Total_time" > "results/"$folder"_results.txt"
 for file in $path/p*.pddl; do
-  filename=$(basename -- "$file" .pddl)"_opt"
+  filename=$(basename -- "$file" .pddl)
   echo "Processing $file"
   output_file="./output/$folder/"$filename"_output.txt"
 
@@ -24,8 +24,8 @@ for file in $path/p*.pddl; do
   echo "Total time: $total_time"
 
   ./../VAL/build/linux64/Release/bin/Validate $path/"domain.pddl" $file plans/"$folder"/"$filename"_filtered_output.txt > ./validation/$folder/"$filename"_validation.txt
-  plan_valid=$(grep -E "Plan valid|Plan invalid" plans/"$folder"/"$filename"_filtered_output.txt)
-  echo "$plan_valid!"
+  plan_valid=$(sed -n '3p' ./validation/$folder/"$filename"_validation.txt)
+  echo "$plan_valid"
 
   echo ""
 done

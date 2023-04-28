@@ -1,14 +1,14 @@
 #!/bin/bash
 cd ..
-path="resources/logistics_ipc2000_strips-typed"
-folder="logistics_ipc2000_strips-typed"
+path="resources/depots_ipc2002_strips-automatic"
+folder="depots_ipc2002_strips-automatic"
 mkdir -p plans/$folder
 mkdir -p results
 mkdir -p output/$folder
 mkdir -p validation/$folder
 echo "Makespan,Total_time" > "results/"$folder"_results.txt"
 for file in $path/p*.pddl; do
-  filename=$(basename -- "$file" .pddl)"_opt"
+  filename=$(basename -- "$file" .pddl)
   echo "Processing $file"
   output_file="./output/$folder/"$filename"_output.txt"
 
@@ -20,12 +20,8 @@ for file in $path/p*.pddl; do
   makespan=$(grep -oP 'makespan : \K\d+\.\d+' "$output_file" | head -1)
   total_time=$(grep "total time" "$output_file" | grep -oP '\b\d+\.\d+\b')
   echo "$makespan,$total_time" >> "results/"$folder"_results.txt"
-  echo "Makespan: $makespan"
-  echo "Total time: $total_time"
 
   ./../VAL/build/linux64/Release/bin/Validate $path/"domain.pddl" $file plans/"$folder"/"$filename"_filtered_output.txt > ./validation/$folder/"$filename"_validation.txt
-  plan_valid=$(grep -E "Plan valid|Plan invalid" plans/"$folder"/"$filename"_filtered_output.txt)
-  echo "$plan_valid!"
 
   echo ""
 done
