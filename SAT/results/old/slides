@@ -1,0 +1,25 @@
+Initial state
+    c ∧ ¬e                    c
+                              ¬e
+
+disjonction :
+    ¬a ∨ ¬b                    ¬a ∨ ¬b
+
+State transitions
+    ¬c ∧ d → b                 c ∨ ¬d ∨ b
+    ¬e ∧ f → a                 e ∨ ¬f ∨ a
+    c ∧ ¬d → a                 ¬c ∨ d ∨ a
+    e ∧ ¬f → b                 ¬e ∨ f ∨ b
+
+Actions
+    a → c ∧ f ∧ ¬d             ¬a ∨ c
+                               ¬a ∨ f
+                               ¬a ∨ ¬d
+
+    b → e ∧ d ∧ ¬f             ¬b ∨ e
+                               ¬b ∨ d
+                               ¬b ∨ ¬f
+
+Goal state:
+    f ∧ ¬d                      f
+                               ¬d

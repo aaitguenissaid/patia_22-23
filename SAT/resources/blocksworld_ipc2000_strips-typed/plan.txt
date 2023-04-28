@@ -1,0 +1,6 @@
+0: (stack d c) [0]
+1: (pick-up d) [0]
+2: (stack c b) [0]
+3: (pick-up c) [0]
+4: (stack b a) [0]
+5: (pick-up b) [0]

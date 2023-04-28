@@ -1,0 +1,35 @@
+nbFluents : 2
+nbActions : 4
+nbVariables : 6
+
+                   Valeur       Valeur
+                 sur l'objet    Encodé pour
+                   probleme     le solveur SAT
+
+Initial.precondPos : 0          1
+
+action : move
+actionIndex :        0          3
+precondPosAction :   0          1
+effectPosAction :    0          7
+effectNegAction :    0         -7
+
+action : move
+actionIndex :        1          4
+precondPosAction :   0          1
+effectPosAction :    1          8
+effectNegAction :    0         -7
+
+action : move
+actionIndex :        2          5
+precondPosAction :   1          2
+effectPosAction :    0          7
+effectNegAction :    1         -8
+
+action : move
+actionIndex :        3          6
+precondPosAction :   1          2
+effectPosAction :    1          8
+effectNegAction :    1         -8
+
+        Goal :       1          8
