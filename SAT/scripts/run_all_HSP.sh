@@ -11,7 +11,7 @@ for folder in ${folders[@]}; do
   mkdir -p output/$folder
   mkdir -p validation/$folder
   echo "Makespan,Total_time" > "results/"$folder"_results.txt"
-  for file in $(ls $path/p*.pddl | head -3); do
+  for file in $path/p*.pddl; do
     filename=$(basename -- "$file" .pddl)
     echo "Processing $file"
     output_file="./output/$folder/"$filename"_output.txt"
