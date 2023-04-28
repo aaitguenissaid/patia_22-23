@@ -1,0 +1,9 @@
+Checking plan: plans/blocksworld_ipc2000_strips-typed_HSP/p011_filtered_output.txt
+Plan executed successfully - checking goal
+Plan valid
+Final value: 22 
+
+Successful plans:
+Value: 22
+ plans/blocksworld_ipc2000_strips-typed_HSP/p011_filtered_output.txt 22 
+
